@@ -26,14 +26,14 @@ else:
         current_savings=0.0
         steps+=1
         for i in range (1, number_of_months+1):
-            current_savings += (current_savings*r/12) + monthly_salary*int(mid)/10000.0
+            current_savings += (current_savings*r/12) + monthly_salary*mid/10000.0
             if i%6==0:
                 monthly_salary+=monthly_salary*semi_annual_raise
         if current_savings<portion_down_payment-100:
-            left=mid+1
+            left=mid
         elif current_savings>portion_down_payment+100:
-            right=mid-1
-        mid=(left+right)/2
+            right=mid
+        mid=int((left+right)/2)
     
     print("Best savings rate: " + str(int(mid)/10000.0))
     print("Steps in bisection search: " + str(steps))
