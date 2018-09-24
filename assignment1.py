@@ -2,7 +2,7 @@
 
 """ Assignment 1: Alpha Group (7) """
 """ Part A """
-
+"""
 # Taking user inputs and variable initialization
 annual_salary = float(input("Enter your annual salary: "))
 portion_saved = float(input("Enter the percentage of your salary to save, as a decimal: " ))
@@ -17,7 +17,7 @@ while current_savings < portion_down_payment :
     months += 1
 print("Number of months: " + str(months))
 
-""" Part B """
+Part B 
 # Taking user inputs and variable initialization
 annual_salary = float(input("Enter your annual salary: "))
 portion_saved = float(input("Enter the percentage of your salary to save, as a decimal: " ))
@@ -36,7 +36,7 @@ while current_savings < portion_down_payment :
 print("Number of months: " + str(months))
 
 
-"""Part C""" 
+Part C
 # Taking user inputs and variable initialization
 annual_salary = float(input("Enter the starting salary: "))
 total_cost = 1000000
@@ -76,22 +76,21 @@ else: # determine the best rate for savings
             print("Best saving rate: " + str(guess_rate/10000))
             print("Steps in bisection search: " + str(steps))
             break
-
-""" Section 2 """
+"""
+"""Section 2"""
 # FIbonacci series
 # Taking user input and variables initialization
 n= int(input("Enter the number of elements: "))
 first = 0
 second = 1
 update = first + second
-series = "1"
+series = 1
 if n == 0 :
     print("invalid input")
 for i in range(n-1) :
-    series += " " + str(update)
+    series += update
     first = second
     second = update
     update = first + second
     
 print(series)
-    
