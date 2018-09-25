@@ -77,7 +77,7 @@ else: # determine the best rate for savings
             print("Steps in bisection search: " + str(steps))
             break
 """
-"""Section 2"""
+"""Section 2
 # FIbonacci series
 # Taking user input and variables initialization
 n= int(input("Enter the number of elements: "))
@@ -94,3 +94,7 @@ for i in range(n-1) :
     update = first + second
     
 print(series)
+"""
+
+# Combination exercise
+n=int(input("Enter the value of n: "))
