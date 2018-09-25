@@ -1,8 +1,8 @@
 
 
 """ Assignment 1: Alpha Group (7) """
-""" Part A """
-"""
+""" Section 1 -Part A """
+
 # Taking user inputs and variable initialization
 annual_salary = float(input("Enter your annual salary: "))
 portion_saved = float(input("Enter the percentage of your salary to save, as a decimal: " ))
@@ -17,7 +17,7 @@ while current_savings < portion_down_payment :
     months += 1
 print("Number of months: " + str(months))
 
-Part B 
+""" Section 1-Part B """ 
 # Taking user inputs and variable initialization
 annual_salary = float(input("Enter your annual salary: "))
 portion_saved = float(input("Enter the percentage of your salary to save, as a decimal: " ))
@@ -36,7 +36,7 @@ while current_savings < portion_down_payment :
 print("Number of months: " + str(months))
 
 
-Part C
+"""Section 1-Part C """
 # Taking user inputs and variable initialization
 annual_salary = float(input("Enter the starting salary: "))
 total_cost = 1000000
@@ -76,8 +76,8 @@ else: # determine the best rate for savings
             print("Best saving rate: " + str(guess_rate/10000))
             print("Steps in bisection search: " + str(steps))
             break
-"""
-"""Section 2
+
+"""Section 2 -A """
 # FIbonacci series
 # Taking user input and variables initialization
 n= int(input("Enter the number of elements: "))
@@ -94,7 +94,42 @@ for i in range(n-1) :
     update = first + second
     
 print(series)
-"""
 
-# Combination exercise
+"""Section 2 - B """
+#Number of combinations of n objects taken r 
+n=int(input("Enter value for n: "))
+r=int(input("Enter value for r: "))
+k=n-r
+fact_n=1  #Initialize a variable "fact_n" 
+fact_r=1  #Initialize a variable "fact_r"
+fact_k=1  #Initialize a variable "fact_k"
+for i in range(1,n+1):
+    fact_n*=i
+for j in range(1,r+1):
+    fact_r*=j
+for l in range(1,k+1):
+    fact_k*=l
+print("The number of combinations of n objects taken r is",fact_n/(fact_r*fact_k))
+
+""" Section 2 -C """
+# Binomial sum
+x=int(input("Enter the value of x: "))
 n=int(input("Enter the value of n: "))
+a=int(input("Enter the value of a: "))
+bina=0
+for k in range(0, n+1):
+    r=n-k
+    fact_n = 1
+    for i in range(1,n+1):
+        fact_n*=i
+    fact_k =1
+    if k == 0:
+        fact_k = 1
+    else:
+        for j in range(1,k+1):
+            fact_k *= j
+    fact_r = 1
+    for l in range(1,r+1):
+        fact_r*= l
+    bina += (fact_n/(fact_k * fact_r)) * x**k * a**(n-k)
+print(bina)
