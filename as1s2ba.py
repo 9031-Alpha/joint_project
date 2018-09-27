@@ -19,4 +19,4 @@ for j in range(1,r+1):
     fact_r*=j
 for l in range(1,k+1):
     fact_k*=l
-print("The number of combinations of n objects taken r is",fact_n/(fact_r*fact_k))
+print("The number of comb of n objects taken r is",fact_n/(fact_r*fact_k))
