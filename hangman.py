@@ -109,16 +109,16 @@ def get_available_letters(letters_guessed):
       yet been guessed.
     '''
     # FILL IN YOUR CODE HERE
-   alphabet=['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
-   alphabet2=alphabet[:]
+    alphabet=['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+    alphabet2=alphabet[:]
    
-   def anotherfunction(A1,A2):
+    def anotherfunction(A1,A2):
        A1Start=A1[:]
        for e in A1:
            if e in A1Start:
                A2.remove(e)
-        return ''.join(str(e) for e in A2)
-    return anotherfunction(letters_guesses,alphabet2)
+               return ''.join(str(e) for e in A2)
+           return anotherfunction(letters_guessed,alphabet2)
     
 # end of part 1
     
