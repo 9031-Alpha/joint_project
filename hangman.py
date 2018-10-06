@@ -109,7 +109,7 @@ def get_available_letters(letters_guessed):
       yet been guessed.
     '''
     # FILL IN YOUR CODE HERE
-    alphabet=['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+    alphabet=[string.ascii_lowercase]
     alphabet2=alphabet[:]
    
     def anotherfunction(A1,A2):
