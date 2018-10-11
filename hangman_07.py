@@ -1,19 +1,6 @@
-<<<<<<< HEAD
 # Assignment 2, hangman.py
 # Group No/Name: 07 ( Alpha)
 # Members: Igbasanmi Olusegun, Mohamed Omer Airaj, Mohamed Fahmy
-=======
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Oct  6 12:19:45 2018
-
-@author: Mohamed Omer Airaj
-"""
-
-# Assignment 2, hangman.py
-# Group No/Name: 
-# Members:
->>>>>>> b7239e140aca01745b50753d087e3c5d8fd6b7b7
 
 # Hangman Game
 # -----------------------------------
@@ -76,27 +63,17 @@ def is_word_guessed(secret_word, letters_guessed):
     '''
     # FILL IN YOUR CODE HERE
     count=0
-<<<<<<< HEAD
     for char in letters_guessed:
         if char in secret_word:
             count+=1
     if count == len(secret_word):
-=======
-    for i,c in enumerate(secret_word):
-        if c in letters_guessed:
-            count+=1
-    if count==len(secret_word):
->>>>>>> b7239e140aca01745b50753d087e3c5d8fd6b7b7
         return True
     else:
         return False
 
-<<<<<<< HEAD
 
 
 
-=======
->>>>>>> b7239e140aca01745b50753d087e3c5d8fd6b7b7
 def get_guessed_word(secret_word, letters_guessed):
     '''
     secret_word: string, the word the user is guessing
@@ -105,30 +82,12 @@ def get_guessed_word(secret_word, letters_guessed):
       which letters in secret_word have been guessed so far.
     '''
     # FILL IN YOUR CODE HERE
-<<<<<<< HEAD
     final_display = list('_' * len(secret_word))
     for i,char in enumerate(secret_word):
         if char in letters_guessed:
             final_display[i] = char
     return " ".join(final_display)
             
-=======
-    count=0
-    blank=['_ ']*len(secret_word)
-    for i,c in letters_guessed:
-        count+=1
-        blank.insert(count-1,c)
-        blank.pop(count)
-        if count==len(secret_word):
-            return ''.join(str(e) for e in blank)
-        else:
-            count+=1
-            blank.insert(count-1,'-')
-            blank.pop(count)
-            if count==len(secret_word):
-                return ''.join(str(e) for e in blank)
-
->>>>>>> b7239e140aca01745b50753d087e3c5d8fd6b7b7
 
 def get_available_letters(letters_guessed):
     '''
@@ -137,20 +96,7 @@ def get_available_letters(letters_guessed):
       yet been guessed.
     '''
     # FILL IN YOUR CODE HERE
-<<<<<<< HEAD
    
-=======
-    alphabet=[string.ascii_lowercase]
-    alphabet2=alphabet[:]
-   
-    def anotherfunction(A1,A2):
-       A1Start=A1[:]
-       for e in A1:
-           if e in A1Start:
-               A2.remove(e)
-               return ''.join(str(e) for e in A2)
-           return anotherfunction(letters_guessed,alphabet2)
->>>>>>> b7239e140aca01745b50753d087e3c5d8fd6b7b7
     
 # end of part 1
     
@@ -271,8 +217,4 @@ def hangman_with_hints(secret_word):
 # uncomment the following two lines. 
     
 #secret_word = choose_word(wordlist)
-<<<<<<< HEAD
 #hangman_with_hints(secret_word)
-=======
-#hangman_with_hints(secret_word)
->>>>>>> b7239e140aca01745b50753d087e3c5d8fd6b7b7
