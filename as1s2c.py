@@ -20,3 +20,4 @@ for k in range(0, n+1):
     bina += (fact_n / (fact_k * fact_r)) * x**k * a**(n-k)
 print(bina)
 
+import pycrypto
