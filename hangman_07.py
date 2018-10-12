@@ -112,7 +112,7 @@ def word_point(secret_word):    # this function would calculate the point for ea
         if char not in unique:
             unique.append(char)
     return len(unique)
-    
+
 # -------------------------------------
 # Hangman Part 2: The Game
 
@@ -189,20 +189,23 @@ def hangman(secret_word):
             warning -= 1
             print("Oops! That is not a valid letter. You have " + str(warning) + " warnings left: ",get_guessed_word(secret_word,letters_guessed))
             print("-------------")
-            print("You have " +str(n) + " guesses left.")
-            print("Available letters: ", get_available_letters(letters_guessed))
-            if warning == 0:    # To notify user when they lose a guess after exceeding allowed warnings
+            if warning > 0:
+                print("You have " +str(n) + " guesses left.")
+                print("Available letters: ", get_available_letters(letters_guessed))
+            else:    # To notify user when they lose a guess after exceeding allowed warnings
                 print("so you lose one guess: ",get_guessed_word(secret_word,letters_guessed))
                 n -=1
                 print("You have " +str(n) + " guesses left.")
+                print("Available letters: ", get_available_letters(letters_guessed))
                 warning = 3
                 
     if is_word_guessed(secret_word, letters_guessed):
+        print("-------------")
         print("Congratulations, You won!")
-        print("Your total score for this game: ",word_point(secret_word)*n)
+        print("Your total score for this game:",word_point(secret_word)*n)
     else:
         print("-------------")
-        print("Sorry, you ran out of guesses. The word was ",secret_word)
+        print("Sorry, you ran out of guesses. The word was",secret_word)
 
 # -----------------------------------
 # end of part 2
