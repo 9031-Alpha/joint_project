@@ -137,8 +137,11 @@ def hangman(secret_word):
     Follows the other limitations detailed in the problem write-up.
     '''
     # FILL IN YOUR CODE HERE
-
-
+    print("Welcome to the game Hangman!")
+    print("I am thinking of a word that is " + str(len(secret_word)) + " letters long.")
+    print(' _ ' * len(secret_word))
+    print("You have 6 guesses left.")
+    print("Letters available: ", get_available_letters(letters_guessed))
 
 # -----------------------------------
 # end of part 2
