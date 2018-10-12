@@ -96,7 +96,12 @@ def get_available_letters(letters_guessed):
       yet been guessed.
     '''
     # FILL IN YOUR CODE HERE
-   
+    all_letters= string.ascii_lowercase
+    available_letters=[]
+    for char in all_letters:
+        if char not in letters_guessed:
+           available_letters.append(char)
+    return "".join(available_letters)
     
 # end of part 1
     
