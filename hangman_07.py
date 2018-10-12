@@ -143,15 +143,15 @@ def hangman(secret_word):
     print("Welcome to the game Hangman!")
     print("I am thinking of a word that is " + str(len(secret_word)) + " letters long.")
     print(' _ ' * len(secret_word))
-    print("You have " + str(3-warning) + " warnings left")
+    print("You have " + str(warning) + " warnings left")
     print("You have " +str(n) + " guesses left.")
     print("Available letters: ", get_available_letters(letters_guessed))
     vowels=['a','e','i','o','u']  #initialising the vowels
     while True:
         guess = input("Please guess a letter: ").lower()   # takes user input and makes it a lowercase always
         if str.isalpha(guess):                             #checks if user input is an alphabet and only then does the game continue
-            letters_guessed.append(guess)                  # keeps memory of user guesses by adding to a list
-            if guess in secret_word:
+            if guess in secret_word and guess not in letters_guessed:
+                letters_guessed.append(guess)                  # keeps memory of user guesses by adding to a list
                 print("Good guess: ",get_guessed_word(secret_word,letters_guessed))
                 print("-------------")
                 print("You have " +str(n) + " guesses left.")
@@ -164,6 +164,7 @@ def hangman(secret_word):
                     n -=1
                     warning = 3
             else:
+                letters_guessed.append(guess)                  # keeps memory of user guesses by adding to a list
                 n -= 1
                 print("Oops! That letter is not in my word: ",get_guessed_word(secret_word,letters_guessed))
                 print("-------------")
