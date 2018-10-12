@@ -157,10 +157,12 @@ def hangman(secret_word):
                 print("You have " +str(n) + " guesses left.")
                 print("Available letters: ", get_available_letters(letters_guessed))
             elif guess in letters_guessed:      # if guess is has been previously guessed
-                print("You have already guessed that letter. You now have " + str(warning-1) + " warnings left: ",get_guessed_word(secret_word,letters_guessed))
-                if warning ==0:
+                warning -= 1
+                print("You have already guessed that letter. You now have " + str(warning) + " warnings left: ",get_guessed_word(secret_word,letters_guessed))
+                if warning == 0:
                 print("You just lost one guess")   
                 n -=1
+                warning = 3
             else:
                 print("Oops! That letter is not in my word: ",get_guessed_word(secret_word,letters_guessed))
                 print("-------------")
@@ -168,7 +170,7 @@ def hangman(secret_word):
                 print("Available letters: ", get_available_letters(letters_guessed))
         else:
             warning -= 1
-            print("Oops! That is not a valid letter. You have " + str(warning-1) + " warnings left: ",get_guessed_word(secret_word,letters_guessed))
+            print("Oops! That is not a valid letter. You have " + str(warning) + " warnings left: ",get_guessed_word(secret_word,letters_guessed))
             if warning == 0:    # To notify user when they lose a guess after exceeding allowed warnings
                 print("You just lost one guess")
                 n -=1
