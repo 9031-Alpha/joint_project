@@ -163,6 +163,13 @@ def hangman(secret_word):
                     print("You just lost one guess")   
                     n -=1
                     warning = 3
+            elif guess not in secret_word and guess in vowels:
+                letters_guessed.append(guess)                  # keeps memory of user guesses by adding to a list
+                n -= 2
+                print("Oops! That letter is not in my word: ",get_guessed_word(secret_word,letters_guessed))
+                print("-------------")
+                print("You have " +str(n) + " guesses left.")
+                print("Available letters: ", get_available_letters(letters_guessed))
             else:
                 letters_guessed.append(guess)                  # keeps memory of user guesses by adding to a list
                 n -= 1
