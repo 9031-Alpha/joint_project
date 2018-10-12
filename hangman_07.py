@@ -166,10 +166,18 @@ def hangman(secret_word):
                 count += 1                      # updating the number of correct guesses
             elif guess in letters_guessed:      # if guess is has been previously guessed
                 warning -= 1
-                print("Oops! You have already guessed that letter. You now have " + str(warning) + " warnings left: ",get_guessed_word(secret_word,letters_guessed))
-                if warning == 0:
+                if warning >= 0:
+                    print("Oops! You have already guessed that letter. You now have " + str(warning) + " warnings left: ",get_guessed_word(secret_word,letters_guessed))
+                    print("-------------")
+                    print("You have " +str(n) + " guesses left.")
+                    print("Available letters: ", get_available_letters(letters_guessed))
+                else:
+                    print("Oops! You have already guessed that letter. You now have no warnings left")
                     print("so you lose one guess: ",get_guessed_word(secret_word,letters_guessed))
                     n -=1
+                    print("-------------")
+                    print("You have " +str(n) + " guesses left.")
+                    print("Available letters: ", get_available_letters(letters_guessed))
                     warning = 3
             elif guess not in secret_word and guess in vowels:
                 letters_guessed.append(guess)                  # keeps memory of user guesses by adding to a list
@@ -187,14 +195,16 @@ def hangman(secret_word):
                 print("Available letters: ", get_available_letters(letters_guessed))
         else:
             warning -= 1
-            print("Oops! That is not a valid letter. You have " + str(warning) + " warnings left: ",get_guessed_word(secret_word,letters_guessed))
-            print("-------------")
-            if warning > 0:
+            if warning >= 0:
+                print("Oops! That is not a valid letter. You have " + str(warning) + " warnings left: ",get_guessed_word(secret_word,letters_guessed))
+                print("-------------")
                 print("You have " +str(n) + " guesses left.")
                 print("Available letters: ", get_available_letters(letters_guessed))
             else:    # To notify user when they lose a guess after exceeding allowed warnings
+                print("Oops! That is not a valid letter. You have no warnings left")
                 print("so you lose one guess: ",get_guessed_word(secret_word,letters_guessed))
                 n -=1
+                print("-------------")
                 print("You have " +str(n) + " guesses left.")
                 print("Available letters: ", get_available_letters(letters_guessed))
                 warning = 3
