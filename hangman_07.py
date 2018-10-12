@@ -139,7 +139,7 @@ def hangman(secret_word):
     # FILL IN YOUR CODE HERE
     letters_guessed=[]
     n=6             # number of guesses
-    warning = 0     # initialising warning count
+    warning = 3     # initialising warning count
     print("Welcome to the game Hangman!")
     print("I am thinking of a word that is " + str(len(secret_word)) + " letters long.")
     print(' _ ' * len(secret_word))
@@ -156,21 +156,26 @@ def hangman(secret_word):
                 print("-------------")
                 print("You have " +str(n) + " guesses left.")
                 print("Available letters: ", get_available_letters(letters_guessed))
+            elif guess in letters_guessed:      # if guess is has been previously guessed
+                print("You have already guessed that letter. You now have " + str(warning-1) + " warnings left: ",get_guessed_word(secret_word,letters_guessed))
+                if warning ==0:
+                print("You just lost one guess")   
+                n -=1
             else:
                 print("Oops! That letter is not in my word: ",get_guessed_word(secret_word,letters_guessed))
                 print("-------------")
                 print("You have " +str(n-1) + " guesses left.")
                 print("Available letters: ", get_available_letters(letters_guessed))
         else:
-            warning += 1
-            print("Oops! That is not a valid letter. You have " + str(3-warning) + " warnings left: ",get_guessed_word(secret_word,letters_guessed))
+            warning -= 1
+            print("Oops! That is not a valid letter. You have " + str(warning-1) + " warnings left: ",get_guessed_word(secret_word,letters_guessed))
+            if warning == 0:    # To notify user when they lose a guess after exceeding allowed warnings
+                print("You just lost one guess")
+                n -=1
+                print("You have " +str(n) + " guesses left.")
+                warning = 3
+                break
             
-        if warning == 3:
-            print("You just lost one guess")
-            n -=1
-            print("You have " +str(n) + " guesses left.")
-            warning = 0
-            break
         
 
 # -----------------------------------
