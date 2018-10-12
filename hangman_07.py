@@ -199,7 +199,7 @@ def hangman(secret_word):
                 
     if is_word_guessed(secret_word, letters_guessed):
         print("Congratulations, You won!")
-        print("Your total score for this game: ",word_point(secret_word))
+        print("Your total score for this game: ",word_point(secret_word)*n)
     else:
         print("-------------")
         print("Sorry, you ran out of guesses. The word was ",secret_word)
