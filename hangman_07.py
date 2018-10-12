@@ -63,8 +63,8 @@ def is_word_guessed(secret_word, letters_guessed):
     '''
     # FILL IN YOUR CODE HERE
     count=0
-    for char in letters_guessed:
-        if char in secret_word:
+    for char in secret_word:
+        if char in letters_guessed:
             count+=1
     if count == len(secret_word):
         return True
@@ -106,7 +106,12 @@ def get_available_letters(letters_guessed):
 # end of part 1
     
     
-    
+def word_point(secret_word):    # this function would calculate the point for each word
+    unique=[]
+    for char in secret_word:
+        if char not in unique:
+            unique.append(char)
+    return len(unique)
     
 # -------------------------------------
 # Hangman Part 2: The Game
@@ -148,7 +153,8 @@ def hangman(secret_word):
     print("You have " +str(n) + " guesses left.")
     print("Available letters: ", get_available_letters(letters_guessed))
     vowels=['a','e','i','o','u']  #initialising the vowels
-    while n > 0 and count < len(secret_word):
+    
+    while n > 0 and not is_word_guessed(secret_word, letters_guessed):
         guess = input("Please guess a letter: ").lower()   # takes user input and makes it a lowercase always
         if str.isalpha(guess):                             #checks if user input is an alphabet and only then does the game continue
             if guess in secret_word and guess not in letters_guessed:
@@ -193,6 +199,7 @@ def hangman(secret_word):
                 
     if count == len(secret_word):
         print("Congratulations, You won!")
+        print("Your total score for this game: ",word_point())
     else:
         print("-------------")
         print("Sorry, you ran out of guesses. The word was ",secret_word)
