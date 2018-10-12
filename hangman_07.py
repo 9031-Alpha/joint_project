@@ -164,9 +164,10 @@ def hangman(secret_word):
                     n -=1
                     warning = 3
             else:
+                n -= 1
                 print("Oops! That letter is not in my word: ",get_guessed_word(secret_word,letters_guessed))
                 print("-------------")
-                print("You have " +str(n-1) + " guesses left.")
+                print("You have " +str(n) + " guesses left.")
                 print("Available letters: ", get_available_letters(letters_guessed))
         else:
             warning -= 1
