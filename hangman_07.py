@@ -237,10 +237,11 @@ def match_with_gaps(my_word, other_word):
     '''
     # FILL IN YOUR CODE HERE
     count =0
-    my_word = my_word.replace(' ','')
-    for i, char in enumerate(my_word):
-        if (char == other_word[i]) or (char == '_' and other_word[i] not in my_word) : # two conditions satisfied for comparison
-            count += 1
+    my_word = my_word.replace(' ','')       # replace function removes all space in my word to ensure proper comparison
+    if len(my_word) == len(other_word):     # first screening crieteria is to check if words have same length
+        for i, char in enumerate(my_word):  # if it passes first screening, then it compares element by element
+            if (char == other_word[i]) or (char == '_' and other_word[i] not in my_word) : # two conditions satisfied for comparison
+                count += 1
     if count == len(other_word):
         return True
     else:
@@ -258,7 +259,14 @@ def show_possible_matches(my_word):
 
     '''
     # FILL IN YOUR CODE HERE
-
+    matches =[]
+    for other_word in wordlist:             # looks through the wordlist for possible matches
+        if match_with_gaps(my_word,other_word):     # calls the function match_wit_gaps to execute the comparison
+            matches.append(other_word)              # if it matches, it stores for future display
+    if matches == []:                               # if no match prints no match found
+        print("No matches found")
+    else:
+        return ' '.join(matches)                    # prints all the possible matches
 
 
 def hangman_with_hints(secret_word):
