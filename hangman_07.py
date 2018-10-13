@@ -236,6 +236,15 @@ def match_with_gaps(my_word, other_word):
         False otherwise: 
     '''
     # FILL IN YOUR CODE HERE
+    count =0
+    my_word = my_word.replace(' ','')
+    for i, char in enumerate(my_word):
+        if (char == other_word[i]) or (char == '_' and other_word[i] not in my_word) : # two conditions satisfied for comparison
+            count += 1
+    if count == len(other_word):
+        return True
+    else:
+        return False
 
 
 def show_possible_matches(my_word):
