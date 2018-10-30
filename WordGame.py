@@ -41,8 +41,6 @@ def get_word_score(word, n):
     else:
         return score * second
 
-word = 'weed'
-score = get_word_score(word, 6)
 
 def get_frequency_dict(string_of_letters): 
     myDict = {} 
@@ -53,7 +51,6 @@ def get_frequency_dict(string_of_letters):
             myDict[letter] = 1 
     return myDict
 
-myDict = get_frequency_dict(word)
 
 def display_hand(hand):
     displayed = ''
@@ -61,8 +58,6 @@ def display_hand(hand):
         displayed += i*hand[i]
     print (' '.join(displayed))
 
-hand = {'a':1, 'q':1, 'l':2, 'm':1, 'u':1, 'i':1}
-display_hand(hand)
 
 def deal_hand(n):
     v = math.ceil(n/3)
@@ -77,7 +72,6 @@ def deal_hand(n):
         generate_hand += letter
     return get_frequency_dict(generate_hand)
 
-new_hand = deal_hand(10)
 
 def update_hand(hand, spelled_word):
     current_hand = copy.deepcopy(hand)
@@ -88,13 +82,10 @@ def update_hand(hand, spelled_word):
             current_hand[i] -= 1
     return current_hand
 
-new_hand1 = update_hand(hand, 'quail')
 
 def is_valid_word(word):
     return word in words
 
-valid = is_valid_word('overhate')
-not_valid = is_valid_word('matata')
         
 
 
