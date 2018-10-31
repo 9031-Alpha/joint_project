@@ -60,23 +60,23 @@ def display_hand(hand):
 
 
 def deal_hand(n):
-    v = math.ceil(n/3)
+    v = math.ceil(n/3)          
     vowels = ['a','e','i','o','u']
-    generate_hand = ''
-    for i in range(v):
+    generate_hand = '*'            # including the wild card
+    for i in range(v-1):
         generate_hand += random.choice(vowels)
     for i in range(n-v):
         letter = 'a'
-        while (letter in vowels):
-            letter = random.choice(list(string.ascii_lowercase))
+        while (letter in vowels):           #ensure the next random numbers are consonants
+            letter = random.choice(list(string.ascii_lowercase))    
         generate_hand += letter
     return get_frequency_dict(generate_hand)
 
 
 def update_hand(hand, spelled_word):
-    current_hand = copy.deepcopy(hand)
+    current_hand = copy.deepcopy(hand)   # clone dictionary 
     for i in spelled_word:
-        if current_hand[i] == 1:
+        if current_hand[i] == 1:        # delete elements one after the other
             del(current_hand[i])
         elif current_hand[i] > 1:
             current_hand[i] -= 1
@@ -84,8 +84,21 @@ def update_hand(hand, spelled_word):
 
 
 def is_valid_word(word):
-    return word in words
-
+    vowels = ['a','e','i','o','u']
+    count = 0
+    if '*' in word:     # Check if word played has a wild card in it
+        i=word.find('*')
+        while count < len(vowels):  # replace wild card with vowels and check if word exist
+            check=list(word)
+            check[i]=vowels[count]
+            count +=1
+            check=''.join(check)
+            if check in words:
+                break
+        return check in words
+    else:
+        return word in words  
+   
         
 
 
