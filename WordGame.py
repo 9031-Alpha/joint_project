@@ -1,3 +1,6 @@
+# Group 07 - Alpha
+# Team members : Igbasanmi Olusegun, Mohamed Omer Airaj, Mohamed Fahmy
+
 import random
 import string
 import math
@@ -44,6 +47,10 @@ def get_word_score(word, n):
 
 
 def get_frequency_dict(string_of_letters): 
+    ''' string of letters(string): takes letters and form a dictionary with
+        each letter as key and the number of times they appear as value 
+    '''
+    
     myDict = {} 
     for letter in string_of_letters: 
         if letter in myDict:
@@ -124,13 +131,19 @@ def substitute_hand(current_hand):
 
         
 def play_hand(resp_count):
+    
+    ''' resp_count(int): It tells the function if this is a hand replay or not
+        the function plays the hand till a score is gotten and updates the game if its a series
+        '''
+    
     total_score = 0
     n=HAND_SIZE
     current_hand =  deal_hand(n)
+    print('')                       # just for output display
     print('Current Hand: ',display_hand(current_hand))
     sub_no = 0                      # number of times substitution has been done in a game
     while len(current_hand)>0:
-        if sub_no > 0 or resp_count > 0:
+        if sub_no > 0 or resp_count > 0:    # limit user to use substitute function only once per hand and never when replaying a hand
             pass
         else:
             response = input('Would you like to substitute a letter? ')
@@ -143,18 +156,17 @@ def play_hand(resp_count):
                 print('')
                 print('Current Hand: ',display_hand(current_hand))
         word = input('Enter word, or "!!" to indicate that you are finished: ')
-        if is_valid_word(word):
+        if is_valid_word(word):             # check if word played is valid
             total_score += get_word_score(word,n)
             print(word +' earned '+str(get_word_score(word,n)) + ' points. Total '+str(total_score)+' points')
             print('')
             current_hand = update_hand(current_hand,word)
             print('Current Hand: ',display_hand(current_hand))
-        elif not is_valid_word(word) and (word !='!!'):
+        elif not is_valid_word(word) and (word !='!!'):             # update hand even though word is invalid
             print('This is not a valid word. Please choose another word')
             current_hand = update_hand(current_hand,word)                   
             print('Current Hand: ',display_hand(current_hand))
-        elif word == '!!':
-            print('Total score: ',total_score )
+        elif word == '!!':              # Exit a hand
             break
         n=len(current_hand)
     if len(current_hand) == 0:
@@ -163,28 +175,36 @@ def play_hand(resp_count):
             
 
 def play_game():
-    # BUG: Fix the conditions of responses
+    ''' This function initiates the complete game. '''
     
-    overall_score = 0   
-    resp_count = 0           
+    overall_score = 0    # initializing the total series score
+    replay_count = 0    # initialise object to track when user has replayed a hand in a series     
     series_N = int(input('Enter total number of hands: '))      # select the number of hands in the series
+    cc = 0
     for i in range(series_N):
+        cc +=1
+        resp_count = 0      #initialise to prevent user from accessing substitution function when replaying a hand
         score1 = play_hand(resp_count)
-        if resp_count < 1:
+        if resp_count < 1 and replay_count < 1:     # allows user replay hand only once in a series
            response2 = input('Would you like to replay the hand? ')       
            if response2 == 'yes':
-               resp_count += 1
+               resp_count += 1                
                score2 = play_hand(resp_count)
-               score = max([score1,score2])
+               score = max([score1,score2])     # update the highest of the two scores when a user replays a hand
+               replay_count +=1         # tracking game
+           else:
+               score = score1
         else:
             score = score1
-        overall_score += score
-    
+        overall_score += score  # update the series overall score
+        print('Total score:',score)
     print('----------------')
     print("Total score over all hands: ",overall_score)
 
 
+# Uncomment code below to run game
 
+#play_game()
 
 
 
