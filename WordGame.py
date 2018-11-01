@@ -76,7 +76,9 @@ def deal_hand(n):
 def update_hand(hand, spelled_word):
     current_hand = copy.deepcopy(hand)   # clone dictionary 
     for i in spelled_word:
-        if current_hand[i] == 1:        # delete elements one after the other
+        if i not in hand:           # if word contains letters not in hand, skip to the next letter
+            continue
+        elif current_hand[i] == 1:        # delete elements one after the other
             del(current_hand[i])
         elif current_hand[i] > 1:
             current_hand[i] -= 1
@@ -90,7 +92,7 @@ def is_valid_word(word):
     count = 0
     if '*' in word:     # Check if word played has a wild card in it
         i=word.find('*')
-        while count < len(vowels):  # replace wild card with vowels and check if word exist, if it does break out of loop 
+        while count < len(vowels):  # replace wild card with vowels and check if word exist, if it does break out of loop (why while instead of for) 
             check=list(word)
             check[i]=vowels[count]
             count +=1
@@ -101,13 +103,41 @@ def is_valid_word(word):
     else:
         return word in words  
    
+
+def substitute_hand(current_hand):
+    ''' current hand(dictionary) of the cards the user currently has. This code substitues the letter the user prompts 
+        with a new random letter that is not neither in his hand nor the letter is is trying to exchange '''
+        
+    letter= input('Which letter would you like to replace: ')
+    if letter in current_hand:
+        number = current_hand[letter]
+        del(current_hand[letter])
+        while number > 0:
+           add = random.choice(string.ascii_lowercase) 
+           if add not in current_hand and add != letter:
+               current_hand[add] = 1
+               number -=1
+        return current_hand
+    else:
+        return current_hand
+
         
 def play_hand():
     total_score = 0
-    n=int(input('Enter initial hand size: '))
+    n=7
     current_hand =  deal_hand(n)
     print('Current Hand: ',display_hand(current_hand))
+    sub_no = 0                      # number of times substitution has been done in a game
     while len(current_hand)>0:
+        response = input('Would you like to substitute a letter? ')
+        if response == 'yes':
+            sub_no += 1
+            current_hand = substitute_hand(current_hand)
+            print('')
+            print('Current Hand: ',display_hand(current_hand))
+        elif response == 'no':
+            print('')
+            print('Current Hand: ',display_hand(current_hand))
         word = input('Enter word, or "!!" to indicate that you are finished: ')
         if is_valid_word(word):
             total_score += get_word_score(word,n)
@@ -117,7 +147,7 @@ def play_hand():
             print('Current Hand: ',display_hand(current_hand))
         elif not is_valid_word(word) and (word !='!!'):
             print('This is not a valid word. Please choose another word')
-            current_hand = update_hand(current_hand,word)
+            current_hand = update_hand(current_hand,word)                   
             print('Current Hand: ',display_hand(current_hand))
         elif word == '!!':
             print('Total score: ',total_score )
@@ -125,17 +155,17 @@ def play_hand():
         n=len(current_hand)
     if len(current_hand) == 0:
         print('Ran out of letters. Total score: ',total_score)
-        
+    return total_score   
             
-            
 
-
-
-
-
-
-
-
+def play_game():
+    overall_score = 0
+    series_N = int(input('Enter total number of hands: '))
+    for i in range(series_N):
+        score = play_hand()
+        overall_score += score
+    print('----------------')
+    print("Total score over all hands: ",overall_score)
 
 
 
