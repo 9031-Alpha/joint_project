@@ -162,8 +162,15 @@ def play_game():
     overall_score = 0
     series_N = int(input('Enter total number of hands: '))
     for i in range(series_N):
-        score = play_hand()
+        score1 = play_hand()
+        response2 = input('Would you like to replay the hand? ')
+        if response2 == 'yes':
+            score2 = play_hand()
+            score = max([score1,score2])
+        else:
+            score = score1
         overall_score += score
+    
     print('----------------')
     print("Total score over all hands: ",overall_score)
 
