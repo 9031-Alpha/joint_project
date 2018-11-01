@@ -5,6 +5,7 @@ import copy
 
 WORDLIST_FILENAME = "words.txt"
 vowels = ['a','e','i','o','u']
+HAND_SIZE = 7
 def load_words():
     """
     Returns a list of words. Words are strings of lowercase letters.
@@ -122,22 +123,25 @@ def substitute_hand(current_hand):
         return current_hand
 
         
-def play_hand():
+def play_hand(resp_count):
     total_score = 0
-    n=7
+    n=HAND_SIZE
     current_hand =  deal_hand(n)
     print('Current Hand: ',display_hand(current_hand))
     sub_no = 0                      # number of times substitution has been done in a game
     while len(current_hand)>0:
-        response = input('Would you like to substitute a letter? ')
-        if response == 'yes':
-            sub_no += 1
-            current_hand = substitute_hand(current_hand)
-            print('')
-            print('Current Hand: ',display_hand(current_hand))
-        elif response == 'no':
-            print('')
-            print('Current Hand: ',display_hand(current_hand))
+        if sub_no > 0 or resp_count > 0:
+            pass
+        else:
+            response = input('Would you like to substitute a letter? ')
+            if response == 'yes':
+                sub_no += 1
+                current_hand = substitute_hand(current_hand)
+                print('')
+                print('Current Hand: ',display_hand(current_hand))
+            elif response == 'no':
+                print('')
+                print('Current Hand: ',display_hand(current_hand))
         word = input('Enter word, or "!!" to indicate that you are finished: ')
         if is_valid_word(word):
             total_score += get_word_score(word,n)
@@ -159,14 +163,19 @@ def play_hand():
             
 
 def play_game():
-    overall_score = 0
-    series_N = int(input('Enter total number of hands: '))
+    # BUG: Fix the conditions of responses
+    
+    overall_score = 0   
+    resp_count = 0           
+    series_N = int(input('Enter total number of hands: '))      # select the number of hands in the series
     for i in range(series_N):
-        score1 = play_hand()
-        response2 = input('Would you like to replay the hand? ')
-        if response2 == 'yes':
-            score2 = play_hand()
-            score = max([score1,score2])
+        score1 = play_hand(resp_count)
+        if resp_count < 1:
+           response2 = input('Would you like to replay the hand? ')       
+           if response2 == 'yes':
+               resp_count += 1
+               score2 = play_hand(resp_count)
+               score = max([score1,score2])
         else:
             score = score1
         overall_score += score
