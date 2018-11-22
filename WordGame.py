@@ -114,7 +114,7 @@ def is_valid_word(word):
 
 def substitute_hand(current_hand):
     ''' current hand(dictionary) of the cards the user currently has. This code substitues the letter the user prompts 
-        with a new random letter that is not neither in his hand nor the letter is is trying to exchange '''
+        with a new random letter that is neither in his hand nor the letter the user is trying to exchange '''
         
     letter= input('Which letter would you like to replace: ')
     if letter in current_hand:
