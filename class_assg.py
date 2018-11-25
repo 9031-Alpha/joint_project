@@ -286,7 +286,11 @@ class user():
                             pos=line.find(',')
                             if line[:pos] not in temp:
                                 temp.append(line[:pos])
+<<<<<<< HEAD
                 return temp   
+=======
+                return temp  
+>>>>>>> 7378ce8f6ee172eb55fceb3d187e2a8cb038327b
 
 class Transaction():
     def __init__(self,bookname=None,username=None,t_type=None):
