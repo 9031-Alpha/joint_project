@@ -197,7 +197,7 @@ class Transaction():
         inFile.close()
         inFile = open(transactionList, 'w')
         for line in doc:
-            if self.bookname not in line and self.username not in line and self.date_time not in line:
+            if self.bookname not in line and self.username not in line and str(self.date_time) not in line:
                 inFile.write(line)
         inFile.close()
         
@@ -233,7 +233,8 @@ x4.add_transaction()
 print(Transaction.load_transactions())
 y = Transaction.search_transaction(username='mohamed')
 print(y)
-
+x1.del_transaction()
+print(Transaction.load_transactions())
 
 
 
