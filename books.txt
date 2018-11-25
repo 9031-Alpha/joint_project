@@ -1,5 +1,7 @@
-PS modelling,Chidera,IEEE
 PS protection,segun,Wiley
-PS modelling,Chidera,IEEE
 FACTs,Omer,ABC corp
 Advanced Physics,Malik,New age
+AI technology,Emma,Cen Learning
+PS modelling,Chidera,IEEE
+Networking principles,Fahmy,oxford
+PS modelling,chidera,IEEE

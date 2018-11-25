@@ -172,14 +172,29 @@ class Book():               # MUST input all attributes unlike author class
                         if line[:pos] not in temp:
                             temp.append(line[:pos])
         if age != None:
-            name = Author.search_by_age(age)
+            age1 = age2 = age
+            name = Author.search_by_age(age1,age2)
             for line in doc:
                 for line2 in name:
                     if line2 in line:
                         pos = line.find(',')
                         if line[:pos] not in temp:
                             temp.append(line[:pos])
-                    
+
+        return temp
+
+
+
+
+
+#class Library(Author,Book):
+#    def __init__(self):
+        
+
+
+
+
+             
 # author1 = Author('segun','1992/10/25','Nigerian')            
 author = Author.search_author('segun')
 print(type(author))
