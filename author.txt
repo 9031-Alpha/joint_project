@@ -1,4 +1,5 @@
-chidera,1994/08/08,Nigeria
-segun,1992/10/25,Nigeria
-Emma,1993/08/08,Nigeria
+chidera,1994/08/08,Nigerian
+segun,1992/10/25,Nigerian
+Emma,1993/08/08,Nigerian
 Malik,1992/08/08,Canadian
+Omer,1988/11/10,Indian

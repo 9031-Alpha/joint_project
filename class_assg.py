@@ -3,7 +3,12 @@ from datetime import date
 authorList = 'author.txt'
 bookList = 'books.txt'
 
-
+''' Assumptions for this assignment
+    The text file containing authors must have the following:
+        Each authors name must be unique
+        Each authors details must be inputted in the order - name,dob(YYYY/MM/DD),nationality
+        Each author's details must be in a new line
+'''
 
 class Author():
     def __init__(self,name=None,dob=None,nationality=None):
@@ -78,7 +83,9 @@ class Author():
     def search_by_age(age1,age2):
         '''age1,age2(integers): the upper and lower limit of age to search for.
         The function returns a list of all authors in the range ''' 
-        
+        if age1 > age2:
+            (age1,age2) = (age2,age1) # this condition allows the user to search by inputting either the upper or lower limit first
+            
         inFile = open(authorList, 'r')    
         doc = inFile.readlines()
         inFile.close()
