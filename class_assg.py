@@ -189,7 +189,7 @@ class Book():               # MUST input all attributes unlike author class
 
         return temp
 
-class user:
+class user():
     def __init__(self,first_name=None,last_name=None,birth_year=None,address=None,phone=None):
         self.first_name=first_name
         self.last_name=last_name
@@ -286,7 +286,9 @@ class user:
                             pos=line.find(',')
                             if line[:pos] not in temp:
                                 temp.append(line[:pos])
+
                 return temp  
+
 
 class Transaction():
     def __init__(self,bookname=None,username=None,t_type=None):
@@ -305,14 +307,26 @@ class Transaction():
         file = open(transactionList,'a+')
         file.write(self.bookname+','+self.username+','+str(self.date_time) +','+str(self.t_type)+'\n')
     
-    def del_transaction(self):
+    def del_transaction(bookname=None,username=None,tr_date=None):
+        if username == bookname == tr_date == None:
+            return 'You MUST include ONE crieteria'
         inFile = open(transactionList, 'r')    
         doc = inFile.readlines()
         inFile.close()
         inFile = open(transactionList, 'w')
         for line in doc:
-            if self.bookname not in line and self.username not in line and str(self.date_time) not in line:
+            if tr_date == username == None and bookname !=None:
+                if bookname not in line:
+                    inFile.write(line)
+            elif tr_date == bookname == None and username !=None:
+                if username not in line:
+                    inFile.write(line)
+            elif bookname == username == None and tr_date !=None:
+                if str(tr_date) not in line:
+                    inFile.write(line)
+            else:
                 inFile.write(line)
+            
         inFile.close()
         
     def search_transaction(tr_date=None, username=None, bookname=None):
@@ -340,8 +354,16 @@ class Transaction():
 
 #class Library(Author,Book):
 #    def __init__(self):
-        
+       
+t1 = Transaction('Advanced Physics','Abhinav',1)
+t2=Transaction('FACTs','Bhavin',1)
+t3 = Transaction('PS modelling','Gurjeet',0)
+t4 = Transaction('Networking principles','Karanbir',1)
 
+t1.add_transaction()
+t2.add_transaction()
+t3.add_transaction()
+t4.add_transaction()
 
 
 
