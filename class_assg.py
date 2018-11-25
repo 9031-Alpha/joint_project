@@ -1,7 +1,9 @@
-from datetime import date
+from datetime import date,datetime
 
 authorList = 'author.txt'
 bookList = 'books.txt'
+userlist='User.txt'
+transactionList = 'transactions.txt'
 
 ''' Assumptions for this assignment
     The text file containing authors must have the following:
@@ -154,12 +156,16 @@ class Book():               # MUST input all attributes unlike author class
         return Book(book_name=line[0],author_name=line[1],publisher_name=line[2])
     
     def search_by_author(name=None, nationality=None, age=None):
+        ''' name,nationality (string) : input the name of the book or nationality of the author
+            age (int): input the age of the author
+            function returns a list of books that fit the crieteria '''
+            
         inFile = open(bookList, 'r')    
         doc = inFile.readlines()
         inFile.close()
         temp = []
         if name != None:
-            for line in doc:
+            for line in doc:   # Review the search conditions 
                 if name in line:
                     pos = line.find(',')
                     temp.append(line[:pos])
@@ -183,6 +189,99 @@ class Book():               # MUST input all attributes unlike author class
 
         return temp
 
+class user:
+    def __init__(self,first_name=None,last_name=None,birth_year=None,address=None,phone=None):
+        self.first_name=first_name
+        self.last_name=last_name
+        self.birth_year=birth_year
+        self.address=address
+        self.phone=phone
+    def age(self):
+        return date.today().year-self.birth_year
+    def __str__(self):
+        return "First Name:" +self.first_name+" "+"Last Name:" +self.last_name+" "+"User Age:" +str(self.age())+" "+"City:" +self.address[1]+" "+"Country:" +self.address[2]+" "+"Phone:" +str(self.phone)
+    def __add__(self,other):
+        self.first_name=other.first_name
+        self.last_name=other.last_name
+        self.address=other.address
+        self.phone=other.phone
+        return "First Name:" +other.first_name+" "+"Last Name:" +other.last_name+" "+"Street:" +str(other.address[0])+" "+"City:" +other.address[1]+" "+"Country:" +other.address[2]+" "+"Phone:" +other(self.phone)
+    def load_users(self):
+        with open(userlist,'r+') as f:
+            new_f=f.readlines()
+            temp=[]
+            for line in new_f:
+                if self.first_name:
+                    temp=self.first_name+" "+self.last_name
+            return temp
+            f.close()
+    def read_user(self):
+        outFile=open(userlist, 'a+')
+        outFile.write(self.first_name+','+self.last_name+','+str(self.birth_year)+','+'('+str(self.address[0])+','+self.address[1]+','+self.address[2]+')'+','+str(self.phone)+'\n')
+        outFile.close()
+    def delete_user(first_name):
+        with open(userlist,'r+') as f:
+            new_f=f.readlines()
+            f.seek(0)
+            for line in new_f:
+                if first_name not in line:
+                    f.write(line)
+            f.truncate()
+    def search_by_name(first_name):
+        with open(userlist,'r') as f:
+            new_f=f.readlines()
+            #f.seek(0)
+            for line in new_f:
+                if first_name in line:
+                    return line
+            f.close()    
+
+class Transaction():
+    def __init__(self,bookname=None,username=None,t_type=None):
+        self.bookname = str(bookname)
+        self.username = username
+        self.date_time = datetime.now()
+        self.t_type = int(t_type)
+    
+    def load_transactions():
+        inFile = open(transactionList, 'r')    
+        doc = inFile.readlines()
+        transaction_list = [x.strip() for x in doc]
+        return transaction_list
+    
+    def add_transaction(self):
+        file = open(transactionList,'a+')
+        file.write(self.bookname+','+self.username+','+str(self.date_time) +','+str(self.t_type)+'\n')
+    
+    def del_transaction(self):
+        inFile = open(transactionList, 'r')    
+        doc = inFile.readlines()
+        inFile.close()
+        inFile = open(transactionList, 'w')
+        for line in doc:
+            if self.bookname not in line and self.username not in line and str(self.date_time) not in line:
+                inFile.write(line)
+        inFile.close()
+        
+    def search_transaction(tr_date=None, username=None, bookname=None):
+        inFile = open(transactionList, 'r')    
+        doc = inFile.readlines()
+        inFile.close()
+        temp = []
+        if tr_date != None:
+            for line in doc:
+                if str(tr_date) in line:
+                    temp.append(line[:-1])
+        if username != None:
+            for line in doc:
+                if username in line and line[:-1] not in temp:
+                    temp.append(line[:-1])
+        if bookname != None:
+            for line in doc:
+                if bookname in line and line[:-1] not in temp:
+                    temp.append(line[:-1])
+        return temp
+
 
 
 
@@ -197,7 +296,7 @@ class Book():               # MUST input all attributes unlike author class
              
 # author1 = Author('segun','1992/10/25','Nigerian')            
 author = Author.search_author('segun')
-print(type(author))
+#print(type(author))
 print(author)
 
 

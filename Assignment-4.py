@@ -7,9 +7,9 @@ transactionList = 'transactions.txt'
 
 class Author():
     def __init__(self,name=None,dob=None,nationality=None):
-        self.name = str(name)
-        self.dob = str(dob)
-        self.nationality = str(nationality)
+        self.name = name
+        self.dob = dob
+        self.nationality = nationality
     
     def get_age(self):
         today = date.today()
@@ -191,17 +191,17 @@ class Transaction():
         file = open(transactionList,'a+')
         file.write(self.bookname+','+self.username+','+str(self.date_time) +','+str(self.t_type)+'\n')
     
-    def del_transaction(self):
+    def del_transaction(bookname = None,username = None, timedate= None):
         inFile = open(transactionList, 'r')    
         doc = inFile.readlines()
         inFile.close()
         inFile = open(transactionList, 'w')
         for line in doc:
-            if self.bookname not in line and self.username not in line and str(self.date_time) not in line:
+            if bookname not in line and username not in line and str(timedate) not in line:
                 inFile.write(line)
         inFile.close()
         
-    def search_transaction(tr_date=None, username=None, bookname=None):
+    def search_transaction(tr_date=None, username=None, bookname=None): # date has to be inputted as a string
         inFile = open(transactionList, 'r')    
         doc = inFile.readlines()
         inFile.close()
@@ -220,20 +220,16 @@ class Transaction():
                     temp.append(line[:-1])
         return temp
     
-x1 = Transaction('physics','mohamed',1)
-x2 = Transaction('chemistry','ahmed',0)
-x3 = Transaction('english','omar',1)
-x4 = Transaction('math','youssef',0)
-print(x1)
-print(x2)
-x1.add_transaction()
-x2.add_transaction()
-x3.add_transaction()
-x4.add_transaction()
-print(Transaction.load_transactions())
-y = Transaction.search_transaction(username='mohamed')
-print(y)
-x1.del_transaction()
+t1 = Transaction('Advanced Physics','Abhinav',1)
+t2=Transaction('FACTs','Bhavin',1)
+t3 = Transaction('PS modelling','Gurjeet',0)
+t4 = Transaction('Networking principles','Karanbir',1)
+
+t1.add_transaction()
+t2.add_transaction()
+t3.add_transaction()
+t4.add_transaction()
+Transaction.search_transaction(username='mohamed')
 print(Transaction.load_transactions())
 
 
