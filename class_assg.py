@@ -39,13 +39,15 @@ class Author():
         return author_list
     
     def author_to_text(self):
+        ''' adds the details of an author to the text file
+        the code is run as a method of the instance '''
+        
         file = open('author.txt','a')
         file.write(self.name+','+self.dob+','+self.nationality +'\n')
           
     def del_author(name):
         inFile = open(authorList, 'r')    
         doc = inFile.readlines()
-        print (doc)
         inFile.close()
         inFile = open(authorList, 'w')
         for line in doc:
@@ -101,22 +103,21 @@ class Author():
             return temp
 
     
-class Book():
+class Book():               # MUST input all attributes unlike author class
     def __init__(self,book_name=None,author_name=None,publisher_name=None):
-        self.book_name = str(book_name)
-        self.author_name = str(author_name)
-        self.publisher_name = str(publisher_name)
-        self.author = Author.search_author(author_name)
+        self.book_name = book_name
+        self.author_name = author_name
+        self.publisher_name = publisher_name
+        self.profile = Author.search_author(author_name)
     
     def __str__(self):
-        return 'Book Info- Book Name:'+ self.book_name +' Publisher:'+ self.publisher_name + ' Author Name:'+ self.author.name + ' Author Nationality:'+ self.author.nationality
-                
-    
-    def __add__(self,other):
-        Book.__init__(self,book_name=None,author_name=None,publisher_name=None)
-        self.book_name = other(0)
-        self.author_name = other(1)
-        self.publisher_name = other(2)
+        return 'Book Info- Book Name:'+ self.book_name +' Publisher:'+ self.publisher_name + ' Author Name:'+ self.author_name + ' Author Nationality:'+ self.profile.nationality
+     
+    def __add__(self,other):      
+        self.book_name = other[0]
+        self.author_name = other[1]
+        self.publisher_name = other[2]     
+        self.profile = Author.search_author(other[1])
         
     def load_books():
         inFile = open(bookList, 'r')    
@@ -125,13 +126,12 @@ class Book():
         return book_list
     
     def book_to_text(self):
-        file = open('books.txt','w+')
+        file = open('books.txt','a')
         file.write(self.book_name+','+self.author_name+','+self.publisher_name +'\n')
         
     def del_book(name):
         inFile = open(bookList, 'r')    
         doc = inFile.readlines()
-        print (doc)
         inFile.close()
         inFile = open(bookList, 'w')
         for line in doc:
