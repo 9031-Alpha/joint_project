@@ -1,7 +1,9 @@
-from datetime import date
+from datetime import date,datetime
 
 authorList = 'author.txt'
 bookList = 'books.txt'
+userlist='User.txt'
+transactionList = 'transactions.txt'
 
 ''' Assumptions for this assignment
     The text file containing authors must have the following:
@@ -154,12 +156,16 @@ class Book():               # MUST input all attributes unlike author class
         return Book(book_name=line[0],author_name=line[1],publisher_name=line[2])
     
     def search_by_author(name=None, nationality=None, age=None):
+        ''' name,nationality (string) : input the name of the book or nationality of the author
+            age (int): input the age of the author
+            function returns a list of books that fit the crieteria '''
+            
         inFile = open(bookList, 'r')    
         doc = inFile.readlines()
         inFile.close()
         temp = []
         if name != None:
-            for line in doc:
+            for line in doc:   # Review the search conditions 
                 if name in line:
                     pos = line.find(',')
                     temp.append(line[:pos])
@@ -183,21 +189,188 @@ class Book():               # MUST input all attributes unlike author class
 
         return temp
 
+class user():
+    def __init__(self,first_name=None,last_name=None,birth_year=None,address=None,phone=None):
+        self.first_name=first_name
+        self.last_name=last_name
+        self.birth_year=birth_year
+        self.address=address
+        self.phone=phone
+    def age(self):
+        return date.today().year-self.birth_year
+    def __str__(self):
+        return "First Name:" +self.first_name+" "+"Last Name:" +self.last_name+" "+"User Age:" +str(self.age())+" "+"City:" +self.address[1]+" "+"Country:" +self.address[2]+" "+"Phone:" +str(self.phone)
+    # To test the above part of the code use the following example data:
+    # user1=user('Abhinav','Nanda',1990,(140,'Whitby','Canada'),9051112222)
+    #print(user1)
+    def __add__(self,other):
+        #user.__init__(self,first_name=None,last_name=None,birth_year=None,address=None,phone=None)
+        self.first_name=other.first_name
+        self.last_name=other.last_name
+        self.address=other.address
+        self.phone=other.phone
+        return "First Name:" +other.first_name+" "+"Last Name:" +other.last_name+" "+"Street:" +str(other.address[0])+" "+"City:" +other.address[1]+" "+"Country:" +other.address[2]+" "+"Phone:" +str(other.phone)
+    # To test the above part of the code use the following example data:
+    # user1=user('Abhinav','Nanda',1990,(140,'Whitby','Canada'),9051112222)
+    #other=user('Pandu','Nand',1980,(40,'Whillyby','Canada'),9051111111)
+    #user1+other
+    def load_users(self):
+        inFile = open(userlist, 'r')    
+        doc = inFile.readlines()
+        user_list = [x.strip() for x in doc] # Removes the next line characters from each line
+        return user_list
+    # To test the above part of the code use the following code:
+    # user().load_users()
+    def read_user(self):
+        outFile=open(userlist, 'a+')
+        outFile.write(self.first_name+','+self.last_name+','+str(self.birth_year)+','+'('+str(self.address[0])+','+self.address[1]+','+self.address[2]+')'+','+str(self.phone)+'\n')
+        outFile.close()
+    # To test the above part of the code use the following example data:
+    #add=user('Pandu','Nand',1980,(40,'Whillyby','Canada'),9051111111)
+    #user.read_user(add)
+    def delete_user(first_name):
+        with open(userlist,'r+') as f:
+            new_f=f.readlines()
+            f.seek(0)
+            for line in new_f:
+                if first_name not in line:
+                    f.write(line)
+            f.truncate()
+    #user.delete_user('Pandu')
+    def search_by_name(first_name):
+        with open(userlist,'r') as f:
+            new_f=f.readlines()
+            f.seek(0)
+            for line in new_f:
+                if first_name in line:
+                    return line[:-1]
+            f.close()
+    def search_by_info(city=None,phone=None,last_name=None): #input phone number as string
+        with open(userlist,'r') as f:
+            new_f=f.readlines()
+            temp=[]
+            f.seek(0)
+            if city!=None:
+                for line in new_f:
+                    if city in line:
+                        pos = line.find(',')
+                        if line[:pos] not in temp:
+                            temp.append(line[:pos])
+                return temp
+            if str(phone)!=None:
+                    for line in new_f:
+                        if str(phone) in line:
+                            pos=line.find(',')
+                            if line[:pos] not in temp:
+                                temp.append(line[:pos])
+                        return temp
+            if last_name!=None:
+                    for line in new_f:
+                        if last_name in line:
+                            pos=line.find(',')
+                            if line[:pos] not in temp:
+                                temp.append(line[:pos])
+                        return temp
+            if city and str(phone)!=None:
+                for line in new_f:
+                    for line in new_f:
+                        if city and str(phone) in line:
+                            pos=line.find(',')
+                            if line[:pos] not in temp:
+                                temp.append(line[:pos])
+                return temp
+            if city and last_name!=None:
+                for line in new_f:
+                    for line in new_f:
+                        if city and str(phone) in line:
+                            pos=line.find(',')
+                            if line[:pos] not in temp:
+                                temp.append(line[:pos])
+
+                return temp  
+
+
+class Transaction():
+    def __init__(self,bookname=None,username=None,t_type=None):
+        self.bookname = str(bookname)
+        self.username = username
+        self.date_time = datetime.now()
+        self.t_type = int(t_type)
+    
+    def load_transactions():
+        inFile = open(transactionList, 'r')    
+        doc = inFile.readlines()
+        transaction_list = [x.strip() for x in doc]
+        return transaction_list
+    
+    def add_transaction(self):
+        file = open(transactionList,'a+')
+        file.write(self.bookname+','+self.username+','+str(self.date_time) +','+str(self.t_type)+'\n')
+    
+    def del_transaction(bookname=None,username=None,tr_date=None):
+        if username == bookname == tr_date == None:
+            return 'You MUST include ONE crieteria'
+        inFile = open(transactionList, 'r')    
+        doc = inFile.readlines()
+        inFile.close()
+        inFile = open(transactionList, 'w')
+        for line in doc:
+            if tr_date == username == None and bookname !=None:
+                if bookname not in line:
+                    inFile.write(line)
+            elif tr_date == bookname == None and username !=None:
+                if username not in line:
+                    inFile.write(line)
+            elif bookname == username == None and tr_date !=None:
+                if str(tr_date) not in line:
+                    inFile.write(line)
+            else:
+                inFile.write(line)
+            
+        inFile.close()
+        
+    def search_transaction(tr_date=None, username=None, bookname=None):
+        inFile = open(transactionList, 'r')    
+        doc = inFile.readlines()
+        inFile.close()
+        temp = []
+        if tr_date != None:
+            for line in doc:
+                if str(tr_date) in line:
+                    temp.append(line[:-1])
+        if username != None:
+            for line in doc:
+                if username in line and line[:-1] not in temp:
+                    temp.append(line[:-1])
+        if bookname != None:
+            for line in doc:
+                if bookname in line and line[:-1] not in temp:
+                    temp.append(line[:-1])
+        return temp
+
 
 
 
 
 #class Library(Author,Book):
 #    def __init__(self):
-        
+       
+t1 = Transaction('Advanced Physics','Abhinav',1)
+t2=Transaction('FACTs','Bhavin',1)
+t3 = Transaction('PS modelling','Gurjeet',0)
+t4 = Transaction('Networking principles','Karanbir',1)
 
+t1.add_transaction()
+t2.add_transaction()
+t3.add_transaction()
+t4.add_transaction()
 
 
 
              
 # author1 = Author('segun','1992/10/25','Nigerian')            
 author = Author.search_author('segun')
-print(type(author))
+#print(type(author))
 print(author)
 
 
