@@ -3,31 +3,13 @@ from datetime import date
 authorList = 'author.txt'
 bookList = 'books.txt'
 
-def load_words():
-    """
-    Returns a list of valid words. Words are strings of lowercase letters.
-    
-    Depending on the size of the word list, this function may
-    take a while to finish.
-    """
-    print("Loading word list from file...")
-    # inFile: file
-    inFile = open(authorList, 'r')
-    # line: string
-    line = inFile.readline()
-    # wordlist: list of strings
-    
-    return line
 
-def get_authors():
-    all_authors =  load_words()
-    print(all_authors.key)
 
 class Author():
     def __init__(self,name=None,dob=None,nationality=None):
-        self.name = str(name)
-        self.dob = str(dob)
-        self.nationality = str(nationality)
+        self.name = name
+        self.dob = dob
+        self.nationality = nationality
     
     def get_age(self):
         today = date.today()
@@ -39,6 +21,7 @@ class Author():
     
     def __str__(self):
         return 'Author info- Name:'+ self.name +' Nationality:'+ self.nationality + ' Age:'+str(self.get_age())
+    
     def __add__(self,other):
         Author.__init__(self,name=None,dob=None,nationality=None)
         self.name = other[0]
@@ -68,7 +51,7 @@ class Author():
         
     def search_author(name):
         ''' name(string) of the author to be searched. This function returns 
-        the details of the author. This function has to be called as a method of 
+        an object of the author. This function has to be called as a method of 
         the class when used outside the class '''
         
         inFile = open(authorList, 'r')    
@@ -90,9 +73,26 @@ class Author():
             if nationality in line:
                 pos = line.find(',')
                 temp.append(line[:pos])
-        return Author(temp)
+        return temp
 
-
+    def search_by_age(age1,age2):
+        '''age1,age2(integers): the upper and lower limit of age to search for.
+        The function returns a list of all authors in the range ''' 
+        
+        inFile = open(authorList, 'r')    
+        doc = inFile.readlines()
+        inFile.close()
+        temp = []
+        for line in doc:
+            line=line.split(',')
+            author = Author(name=line[0],dob=line[1],nationality=line[2])
+            age = author.get_age()
+            if age >= age1 and age <= age2:
+                temp.append(line[0])
+        if temp == []:
+            return 'No Author available in this age range'
+        else:
+            return temp
 
     
 class Book():
