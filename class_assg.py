@@ -13,7 +13,7 @@ bookList = 'books.txt'
 class Author():
     def __init__(self,name=None,dob=None,nationality=None):
         self.name = name
-        self.dob = dob
+        self.dob = str(dob)
         self.nationality = nationality
     
     def get_age(self):
@@ -21,7 +21,6 @@ class Author():
         datee = self.dob
         datee= datee.split('/')
         year = int(datee[0])
-        
         return today.year - year 
     
     def __str__(self):
@@ -110,7 +109,8 @@ class Book():
         self.author = Author.search_author(author_name)
     
     def __str__(self):
-        return 'Book Info- Book Name:'+ self.book_name +' Publisher:'+ self.publisher_name + print(author)
+        return 'Book Info- Book Name:'+ self.book_name +' Publisher:'+ self.publisher_name + ' Author Name:'+ self.author.name + ' Author Nationality:'+ self.author.nationality
+                
     
     def __add__(self,other):
         Book.__init__(self,book_name=None,author_name=None,publisher_name=None)
@@ -180,7 +180,7 @@ class Book():
                         if line[:pos] not in temp:
                             temp.append(line[:pos])
                     
-            
+# author1 = Author('segun','1992/10/25','Nigerian')            
 author = Author.search_author('segun')
 print(type(author))
 print(author)
