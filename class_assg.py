@@ -29,6 +29,9 @@ class Author():
         return 'Author info- Name:'+ self.name +' Nationality:'+ self.nationality + ' Age:'+str(self.get_age())
     
     def __add__(self,other):
+        ''' other(tuple): updates the atrtibute of the instance of a class 
+        '''
+        
         Author.__init__(self,name=None,dob=None,nationality=None)
         self.name = other[0]
         self.dob = other[1] 
@@ -414,6 +417,10 @@ class Library(Author,Book,user,Transaction):
 
     
     def main_menu():
+        '''
+        This function creates an interactive interface with menus and submenus
+        '''
+        
         menu ={}
         menu['i'] = 'AUTHORS'
         menu['ii']=  'BOOKS'
