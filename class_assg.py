@@ -441,9 +441,9 @@ class Library(Author,Book,user,Transaction):
             print(submenu)
             acc = int(input('Make a selection from above list: '))
             if acc == 1:
-                name= input('Enter name,dob,nationality of author: ')
-                dob=input('Enter name,dob,nationality of author: ')
-                nationality=input('Enter name,dob,nationality of author: ')
+                name= input('Enter name of author: ')
+                dob=input('Enter dob of author: ')
+                nationality=input('Enter nationality of author: ')
                 C = Author(name,dob,nationality)
                 C.author_to_text()
             if acc == 2:        # not yet
