@@ -4,4 +4,12 @@ Emma,1993/08/08,Nigerian
 Malik,1992/08/08,Canadian
 Omer,1988/11/10,Indian
 Fahmy,1993/08/08,Egyptian
+<<<<<<< HEAD
 Emeka,1985/10/11,USA
+=======
+fahmy,1993/1/1,canadian
+fahmy,1993/1/1,canadian
+fahmy,1993/1/1,canadian
+fahmy,1993/1/1,canadian
+fahmy,1993/1/1,canadian
+>>>>>>> 9a61909e9f3b6fe7231ca07999588a34aec8e70f

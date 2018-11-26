@@ -102,34 +102,25 @@ class user:
         return date.today().year-self.birth_year
     def __str__(self):
         return "First Name:" +self.first_name+" "+"Last Name:" +self.last_name+" "+"User Age:" +str(self.age())+" "+"City:" +self.address[1]+" "+"Country:" +self.address[2]+" "+"Phone:" +str(self.phone)
-    # To test the above part of the code use the following example data:
-    # user1=user('Abhinav','Nanda',1990,(140,'Whitby','Canada'),9051112222)
-    #print(user1)
     def __add__(self,other):
-        #user.__init__(self,first_name=None,last_name=None,birth_year=None,address=None,phone=None)
         self.first_name=other.first_name
         self.last_name=other.last_name
         self.address=other.address
         self.phone=other.phone
-        return "First Name:" +other.first_name+" "+"Last Name:" +other.last_name+" "+"Street:" +str(other.address[0])+" "+"City:" +other.address[1]+" "+"Country:" +other.address[2]+" "+"Phone:" +str(other.phone)
-    # To test the above part of the code use the following example data:
-    # user1=user('Abhinav','Nanda',1990,(140,'Whitby','Canada'),9051112222)
-    #other=user('Pandu','Nand',1980,(40,'Whillyby','Canada'),9051111111)
-    #user1+other
+        return "First Name:" +other.first_name+" "+"Last Name:" +other.last_name+" "+"Street:" +str(other.address[0])+" "+"City:" +other.address[1]+" "+"Country:" +other.address[2]+" "+"Phone:" +other(self.phone)
     def load_users(self):
-        inFile = open(userlist, 'r')    
-        doc = inFile.readlines()
-        user_list = [x.strip() for x in doc] # Removes the next line characters from each line
-        return user_list
-    # To test the above part of the code use the following code:
-    # user().load_users()
+        with open(userlist,'r+') as f:
+            new_f=f.readlines()
+            temp=[]
+            for line in new_f:
+                if self.first_name:
+                    temp=self.first_name+" "+self.last_name
+            return temp
+            f.close()
     def read_user(self):
         outFile=open(userlist, 'a+')
         outFile.write(self.first_name+','+self.last_name+','+str(self.birth_year)+','+'('+str(self.address[0])+','+self.address[1]+','+self.address[2]+')'+','+str(self.phone)+'\n')
         outFile.close()
-    # To test the above part of the code use the following example data:
-    #add=user('Pandu','Nand',1980,(40,'Whillyby','Canada'),9051111111)
-    #user.read_user(add)
     def delete_user(first_name):
         with open(userlist,'r+') as f:
             new_f=f.readlines()
@@ -138,54 +129,11 @@ class user:
                 if first_name not in line:
                     f.write(line)
             f.truncate()
-    #user.delete_user('Pandu')
     def search_by_name(first_name):
         with open(userlist,'r') as f:
             new_f=f.readlines()
-            f.seek(0)
+            #f.seek(0)
             for line in new_f:
                 if first_name in line:
-                    return line[:-1]
+                    return line
             f.close()
-    def search_by_info(city=None,phone=None,last_name=None): #input phone number as string
-        with open(userlist,'r') as f:
-            new_f=f.readlines()
-            temp=[]
-            f.seek(0)
-            if city!=None:
-                for line in new_f:
-                    if city in line:
-                        pos = line.find(',')
-                        if line[:pos] not in temp:
-                            temp.append(line[:pos])
-                return temp
-            if str(phone)!=None:
-                    for line in new_f:
-                        if str(phone) in line:
-                            pos=line.find(',')
-                            if line[:pos] not in temp:
-                                temp.append(line[:pos])
-                        return temp
-            if last_name!=None:
-                    for line in new_f:
-                        if last_name in line:
-                            pos=line.find(',')
-                            if line[:pos] not in temp:
-                                temp.append(line[:pos])
-                        return temp
-            if city and str(phone)!=None:
-                for line in new_f:
-                    for line in new_f:
-                        if city and str(phone) in line:
-                            pos=line.find(',')
-                            if line[:pos] not in temp:
-                                temp.append(line[:pos])
-                return temp
-            if city and last_name!=None:
-                for line in new_f:
-                    for line in new_f:
-                        if city and str(phone) in line:
-                            pos=line.find(',')
-                            if line[:pos] not in temp:
-                                temp.append(line[:pos])
-                return temp  

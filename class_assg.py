@@ -29,9 +29,6 @@ class Author():
         return 'Author info- Name:'+ self.name +' Nationality:'+ self.nationality + ' Age:'+str(self.get_age())
     
     def __add__(self,other):
-        ''' other(tuple): updates the atrtibute of the instance of a class 
-        '''
-        
         Author.__init__(self,name=None,dob=None,nationality=None)
         self.name = other[0]
         self.dob = other[1] 
@@ -159,7 +156,7 @@ class Book():               # MUST input all attributes unlike author class
         return Book(book_name=line[0],author_name=line[1],publisher_name=line[2])
     
     def search_by_author(name=None, nationality=None, age=None):
-        ''' name,nationality (string) : input the name of the author or nationality of the author
+        ''' name,nationality (string) : input the name of the book or nationality of the author
             age (int): input the age of the author
             function returns a list of books that fit the crieteria '''
             
@@ -192,7 +189,7 @@ class Book():               # MUST input all attributes unlike author class
 
         return temp
 
-class user:
+class user():
     def __init__(self,first_name=None,last_name=None,birth_year=None,address=None,phone=None):
         self.first_name=first_name
         self.last_name=last_name
@@ -217,7 +214,7 @@ class user:
     # user1=user('Abhinav','Nanda',1990,(140,'Whitby','Canada'),9051112222)
     #other=user('Pandu','Nand',1980,(40,'Whillyby','Canada'),9051111111)
     #user1+other
-    def load_users():
+    def load_users(self):
         inFile = open(userlist, 'r')    
         doc = inFile.readlines()
         user_list = [x.strip() for x in doc] # Removes the next line characters from each line
@@ -310,14 +307,26 @@ class Transaction():
         file = open(transactionList,'a+')
         file.write(self.bookname+','+self.username+','+str(self.date_time) +','+str(self.t_type)+'\n')
     
-    def del_transaction(bookname = None,username = None, timedate= None):
+    def del_transaction(bookname=None,username=None,tr_date=None):
+        if username == bookname == tr_date == None:
+            return 'You MUST include ONE crieteria'
         inFile = open(transactionList, 'r')    
         doc = inFile.readlines()
         inFile.close()
         inFile = open(transactionList, 'w')
         for line in doc:
-            if bookname not in line and username not in line and str(timedate) not in line:
+            if tr_date == username == None and bookname !=None:
+                if bookname not in line:
+                    inFile.write(line)
+            elif tr_date == bookname == None and username !=None:
+                if username not in line:
+                    inFile.write(line)
+            elif bookname == username == None and tr_date !=None:
+                if str(tr_date) not in line:
+                    inFile.write(line)
+            else:
                 inFile.write(line)
+            
         inFile.close()
         
     def search_transaction(tr_date=None, username=None, bookname=None):
@@ -343,6 +352,7 @@ class Transaction():
 
 
 
+<<<<<<< HEAD
 class Library(Author,Book,user,Transaction):
     def __init__(self,name):
         self.name = name
@@ -589,19 +599,28 @@ Library.main_menu()
 #t2=Transaction('FACTs','Bhavin',1)
 #t3 = Transaction('PS modelling','Gurjeet',0)
 #t4 = Transaction('Networking principles','Karanbir',1)
+=======
+#class Library(Author,Book):
+#    def __init__(self):
+       
+t1 = Transaction('Advanced Physics','Abhinav',1)
+t2=Transaction('FACTs','Bhavin',1)
+t3 = Transaction('PS modelling','Gurjeet',0)
+t4 = Transaction('Networking principles','Karanbir',1)
+>>>>>>> 9a61909e9f3b6fe7231ca07999588a34aec8e70f
 
-#t1.add_transaction()
-#t2.add_transaction()
-#t3.add_transaction()
-#t4.add_transaction()
+t1.add_transaction()
+t2.add_transaction()
+t3.add_transaction()
+t4.add_transaction()
 
 
 
              
 # author1 = Author('segun','1992/10/25','Nigerian')            
-#author = Author.search_author('segun')
+author = Author.search_author('segun')
 #print(type(author))
-#print(author)
+print(author)
 
 
 
