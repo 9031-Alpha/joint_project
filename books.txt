@@ -1,6 +1,7 @@
 PS protection,segun,Wiley
-AI technology,Emma,Cen Learning
-PS modelling,chidera,IEEE
-Networking principles,Fahmy,oxford
-Advanced Physics,Malik,New age
 FACTs,Omer,ABC corp
+Advanced Physics,Malik,New age
+AI technology,Emma,Cen Learning
+PS modelling,Chidera,IEEE
+Networking principles,Fahmy,oxford
+PS modelling,chidera,IEEE
