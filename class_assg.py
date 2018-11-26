@@ -156,7 +156,7 @@ class Book():               # MUST input all attributes unlike author class
         return Book(book_name=line[0],author_name=line[1],publisher_name=line[2])
     
     def search_by_author(name=None, nationality=None, age=None):
-        ''' name,nationality (string) : input the name of the book or nationality of the author
+        ''' name,nationality (string) : input the name of the author or nationality of the author
             age (int): input the age of the author
             function returns a list of books that fit the crieteria '''
             
@@ -214,7 +214,7 @@ class user():
     # user1=user('Abhinav','Nanda',1990,(140,'Whitby','Canada'),9051112222)
     #other=user('Pandu','Nand',1980,(40,'Whillyby','Canada'),9051111111)
     #user1+other
-    def load_users(self):
+    def load_users():
         inFile = open(userlist, 'r')    
         doc = inFile.readlines()
         user_list = [x.strip() for x in doc] # Removes the next line characters from each line
@@ -307,26 +307,14 @@ class Transaction():
         file = open(transactionList,'a+')
         file.write(self.bookname+','+self.username+','+str(self.date_time) +','+str(self.t_type)+'\n')
     
-    def del_transaction(bookname=None,username=None,tr_date=None):
-        if username == bookname == tr_date == None:
-            return 'You MUST include ONE crieteria'
+    def del_transaction(bookname = None,username = None, timedate= None):
         inFile = open(transactionList, 'r')    
         doc = inFile.readlines()
         inFile.close()
         inFile = open(transactionList, 'w')
         for line in doc:
-            if tr_date == username == None and bookname !=None:
-                if bookname not in line:
-                    inFile.write(line)
-            elif tr_date == bookname == None and username !=None:
-                if username not in line:
-                    inFile.write(line)
-            elif bookname == username == None and tr_date !=None:
-                if str(tr_date) not in line:
-                    inFile.write(line)
-            else:
+            if bookname not in line and username not in line and str(timedate) not in line:
                 inFile.write(line)
-            
         inFile.close()
         
     def search_transaction(tr_date=None, username=None, bookname=None):
@@ -352,26 +340,103 @@ class Transaction():
 
 
 
-#class Library(Author,Book):
-#    def __init__(self):
-       
-t1 = Transaction('Advanced Physics','Abhinav',1)
-t2=Transaction('FACTs','Bhavin',1)
-t3 = Transaction('PS modelling','Gurjeet',0)
-t4 = Transaction('Networking principles','Karanbir',1)
+class Library(Author,Book,user,Transaction):
+    def __init__(self,name):
+        self.name = name
+        self.userlist= user.load_users()
+        self.authorlist = Author.load_authors()
+        self.booklist = Book.load_books()
+        self.tranlist = Transaction.load_transactions()
+        self.dictn = Library.show_book_name()
+    
+   
+        
+    def show_book_name():
+        dictn= {}
+        books= Book.load_books()
+        for item in books:
+            item_list = item.split(',')
+            dictn[item_list[0]] = 4
+        transac = Transaction.load_transactions()
+        for item in transac:
+            item_list = item.split(',')
+            t_type = item_list[-1]
+            if t_type == '1':
+               dictn[item_list[0]] -= 1
+            elif t_type == '0':
+                dictn[item_list[0]] += 1
+            
+        return dictn
+        
 
-t1.add_transaction()
-t2.add_transaction()
-t3.add_transaction()
-t4.add_transaction()
+    def borrow_book(bookname = None, username=None):
+        transac= Transaction(bookname,username,1)
+        transac.add_transaction()
+
+    def return_book(bookname=None, username=None):
+        transac=Transaction(bookname,username,0)
+        transac.add_transaction()
+    
+    def show_book_authorname(author_name):
+        bookname = Book.search_by_author(name = author_name)[0]
+        lib = Library.show_book_name()
+        if bookname in lib:
+            available = lib[bookname]
+        return bookname + ': ' + str(available)
+    
+    def show_book_nationality(author_nationality):
+        bookname = Book.search_by_author(nationality = author_nationality)
+        lib = Library.show_book_name()
+        available ={}
+        for i in bookname:
+            if i in lib:
+                available[i] = lib[i]
+        return available
+    
+    def borrowed_book(username):
+        transac = Transaction.load_transactions() #transList
+        book=[]
+        for item in transac:
+            item_list = item.split(',')
+            if item_list[1] == username:
+                book.append(item_list[0])
+        return book      
+        
+    def borrowed_book_phone(phone):     #phone number has to be entered as a string
+        name = user.search_by_info(phone)
+        transac = Transaction.load_transactions() #transList
+        book=[]
+        for item in transac:
+            item_list = item.split(',')
+            if item_list[1] == name[0]:
+                book.append(item_list[0])
+        return book
+
+    
+
+
+
+
+
+
+       
+#t1 = Transaction('Advanced Physics','Abhinav',1)
+#t2=Transaction('FACTs','Bhavin',1)
+#t3 = Transaction('PS modelling','Gurjeet',0)
+#t4 = Transaction('Networking principles','Karanbir',1)
+
+#t1.add_transaction()
+#t2.add_transaction()
+#t3.add_transaction()
+#t4.add_transaction()
 
 
 
              
 # author1 = Author('segun','1992/10/25','Nigerian')            
-author = Author.search_author('segun')
+#author = Author.search_author('segun')
 #print(type(author))
-print(author)
+#print(author)
 
 
 
