@@ -189,7 +189,7 @@ class Book():               # MUST input all attributes unlike author class
 
         return temp
 
-class user():
+class user:
     def __init__(self,first_name=None,last_name=None,birth_year=None,address=None,phone=None):
         self.first_name=first_name
         self.last_name=last_name
@@ -413,13 +413,171 @@ class Library(Author,Book,user,Transaction):
         return book
 
     
+    def main_menu():
+        menu ={}
+        menu['i'] = 'AUTHORS'
+        menu['ii']=  'BOOKS'
+        menu['iii'] = 'USERS'
+        menu['iv']='LIBRARY'
+        menu['v'] = 'EXIT'
+        print(menu)
+        access = input('Make a selection from above list: ')
+        if access == 'i':
+            print('AUTHOR FUNCTIONS')
+            submenu={}
+            submenu[1] = 'ADD'
+            submenu[2] = 'UPDATE'
+            submenu[3] = 'DELETE'
+            submenu[4] = 'SEARCH BY NAME'
+            submenu[5] = 'SEARCH BY AGE'
+            submenu[6] = 'SEARCH BY NATIONALITY'
+            print(submenu)
+            acc = int(input('Make a selection from above list: '))
+            if acc == 1:
+                name= input('Enter name,dob,nationality of author: ')
+                dob=input('Enter name,dob,nationality of author: ')
+                nationality=input('Enter name,dob,nationality of author: ')
+                C = Author(name,dob,nationality)
+                C.author_to_text()
+            if acc == 2:        # not yet
+                name= input('Enter name of author: ')
+                dob=input('Enter dob of author: ')
+                nationality=input('Enter nationality of author: ')
+                other = (name,dob,nationality)
+                Author.__add__(other)
+            if acc == 3:
+                name = input('Enter name of author you want to delete: ')
+                Author.del_author(name)
+            if acc == 4:
+                name =input('Enter name of author you want to search: ')
+                print(Author.search_author(name))
+            if acc == 5:
+                age1 =int(input('Enter lower age limit of author you want to search: '))
+                age2 =int(input('Enter upper age limit of author you want to search: '))
+                print(Author.search_by_age(age1,age2))
+            if acc == 6:
+                nationality = input('Enter nationality of author you want to search: ')
+                print(Author.search_by_nationality(nationality))
+                
+        if access == 'ii':
+            print('BOOK FUNCTIONS')
+            submenu={}
+            submenu[1] = 'ADD'
+            submenu[2] = 'UPDATE'
+            submenu[3] = 'DELETE'
+            submenu[4] = 'SEARCH BY NAME'
+            submenu[5] = 'SEARCH BY AUTHOR NAME OR NATIONALITY'
+            print(submenu)
+            acc = int(input('Make a selection from above list: '))
+            if acc == 1:
+                bookname= input('Enter name of book: ')
+                authorname=input('Enter name of author: ')
+                publishername=input('Enter name of publisher: ')
+                C = Book(bookname,authorname,publishername)
+                C.book_to_text()
+            if acc == 2:        # not yet
+                bookname= input('Enter name of book: ')
+                authorname=input('Enter name of author: ')
+                publishername=input('Enter name of publisher: ')
+                other = (bookname,authorname,publishername)
+                Book.__add__(other)
+            if acc == 3:
+                name = input('Enter name of book you want to delete: ')
+                Book.del_book(name)
+            if acc == 4:
+                name =input('Enter name of book you want to search: ')
+                b=Book.search_book(name)
+                print(b)
+            if acc == 5:
+                a_name =input('Enter name of author: ')
+                a_nationality = input('Enter nationality of author: ')
+                if a_nationality == '':
+                   print(Book.search_by_author(name = a_name)) 
+                if a_name == '' :
+                   print(Book.search_by_author(nationality = a_nationality))
+                
+        if access == 'iii':
+            print('USER FUNCTIONS')
+            submenu={}
+            submenu[1] = 'ADD'
+            submenu[2] = 'UPDATE'
+            submenu[3] = 'DELETE'
+            submenu[4] = 'SEARCH BY NAME'
+            submenu[5] = 'SEARCH BY CITY'
+            print(submenu)
+            acc = int(input('Make a selection from above list: '))
+            if acc == 1:
+                first_name= input('Enter user first name: ')
+                last_name=input('Enter user last name: ')
+                birth_year = int(input('Enter your birth year: '))
+                address = input('Enter your address in format, number,city,counrty: ')
+                phone = input('Enter phone number: ')
+                c = user(first_name,last_name,birth_year,address,phone)
+                c.read_user()
+            if acc == 2:        # not yet
+                first_name= input('Enter user first name: ')
+                last_name=input('Enter user last name: ')
+                birth_year=int(input('Enter user last name: '))
+                address=input('Enter user address: ')
+                phone=input('Enter user phone number: ')
+                other = user(first_name,last_name,birth_year,address,phone)
+                other.read_user()
+            if acc == 3:
+                first_name = input ('Enter first name of user you want to delete: ')
+                user.delete_user(first_name)
+            if acc == 4:
+                first_name = input('Enter first name of user you want to search: ')
+                print(user.search_by_name(first_name))
+            if acc == 5:
+                u_city = input('Enter city of user you want to search: ')
+                print(user.search_by_info(u_city))
+        
+        
+
+        if access == 'iv':
+            print('LIBRARY EXCHANGE')
+            submenu={}
+            submenu[1] = 'BORROW BOOK'
+            submenu[2] = 'RETURN BOOK'
+            submenu[3] = 'SHOW BOOK AVAILABILITY BY NAME'
+            submenu[4] = 'SHOW BOOK AVAILABILITY BY AUTHOR NAME'
+            submenu[5] = 'SHOW BOOK AVAILABILITY BY AUTHOR NATIONALITY'
+            submenu[6] = 'SHOW BORROWED BOOK BY USERNAME'
+            submenu[7] = 'SHOW BORROWED BOOK BY PHONE'
+            print(submenu)
+            acc = int(input('Make a selection from above list: '))
+            if acc == 1:
+                user1 = input('Enter your username: ')
+                book = input('Enter book name you want to borrow: ')
+                Library.borrow_book(bookname=book, username=user1)
+            if acc == 2:
+                user1 = input('Enter user name: ')
+                book = input('Enter name of book being returned: ')
+                Library.return_book(bookname=book,username=user1)
+            if acc == 3:
+                print( 'Books available and the quantities are: ')
+                print(Library.show_book_name())
+            if acc == 4:
+                author_name = input ('Enter author of the book to check for availability: ')
+                print(Library.show_book_authorname(author_name))
+            if acc == 5:
+                author_nationality = input ('Enter nationality of the author of the book you want: ')
+                print(Library.show_book_nationality(author_nationality))
+            if acc == 6:
+                user1 = input('Enter the username: ')
+                print(Library.borrowed_book(user1))
+            if acc == 7:
+                phone = input('Enter phone number of user: ')
+                print(Library.borrowed_book_phone(phone))
+        if access == 'v':
+            print('THANK YOU!!!')
+           
+        
+            
+            
 
 
-
-
-
-
-       
+Library.main_menu()
 #t1 = Transaction('Advanced Physics','Abhinav',1)
 #t2=Transaction('FACTs','Bhavin',1)
 #t3 = Transaction('PS modelling','Gurjeet',0)
