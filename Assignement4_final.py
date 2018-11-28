@@ -181,7 +181,7 @@ class Book():               # MUST input all attributes unlike author class
                         if line[:pos] not in temp:
                             temp.append(line[:pos])
         if age != None:
-            age1 = age2 = age
+            age1 = age2 = int(age)
             name = Author.search_by_age(age1,age2)
             for line in doc:
                 for line2 in name:
@@ -499,10 +499,16 @@ class Library(Author,Book,user,Transaction):
                 if acc == 5:
                     a_name =input('Enter name of author: ')
                     a_nationality = input('Enter nationality of author: ')
+                    a_age = input('Enter age of author: ')
+                    if a_name == '':
+                        a_name = None
+                        #print(Book.search_by_author(name = a_name)) 
                     if a_nationality == '':
-                        print(Book.search_by_author(name = a_name)) 
-                    if a_name == '' :
+                        a_nationality = None
                         print(Book.search_by_author(nationality = a_nationality))
+                    if a_age == '':
+                        a_age = None
+                    print(Book.search_by_author(a_name,a_nationality,a_age))
                    
             if access == 'iii':
                 print('USER FUNCTIONS')

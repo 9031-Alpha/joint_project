@@ -204,7 +204,7 @@ def play_game():
 
 # Uncomment code below to run game
 
-#play_game()
+play_game()
 
 
 
