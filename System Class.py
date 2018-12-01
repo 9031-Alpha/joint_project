@@ -11,7 +11,8 @@ from numpy import *
 from numpy import matrix
 
 class system():
-    def __init__(self,number_of_buses=None,line_impedance=None,bus_voltage=None,bus_angle=None,real_power=None,reactive_power=None):
+    def __init__(self,name,number_of_buses=None,line_impedance=None,bus_voltage=None,bus_angle=None,real_power=None,reactive_power=None):
+        self.name = name
         self.number_of_buses=number_of_buses
         self.line_impedance=line_impedance
         self.bus_voltage=bus_voltage
@@ -97,7 +98,7 @@ class system():
                 Ybus = array([[Y11,Y12,Y13],[Y21,Y22,Y23],[Y31,Y32,Y33]])
         return Ybus
     
-    def Gauss_Seidel():
+    def Gauss_Seidel(self):
         n=int(input("Enter the number of buses: "))
         if n==2:
             B1=V1=system.accept_input()
