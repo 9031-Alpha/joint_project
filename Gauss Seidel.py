@@ -36,8 +36,7 @@ def Gauss_Seidel():
         for i in range(1,n+1):
             V2=1/Y[1][1]*((S2/v2.conjugate())-(Y[0][1]*v1))
             v2=V2
-            print(polar(V2))
-        return(V2)
+        return(polar(V2))
     elif number_of_buses==3:
         a1=float(input("Enter the real part of bus 1-2: "))
         a2=float(input("Enter the imaginary part of bus 1-2: "))
