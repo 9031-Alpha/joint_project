@@ -38,20 +38,20 @@ class system():
             print('Bus has been selected the slack bus')
             v1 = float(input('Enter the bus voltage magnitude: '))
             ang1 = float(input('Enter the bus voltage angle: '))
-            B1 = complex(v1,ang1)    # converts the user input to a form that is understandable
-            return (B1)
+            B1 = system.convert_pol2rec(v1,ang1)    # converts the user input to a form that is understandable
+            return (B1,1)
     
         if Bus == 2:
             print('Bus  has been selected as a load bus')
             Pspec = -(float(input('Enter the real power of load in pu: ')))
             Qspec = -(float(input('Enter the reactive power of load in pu: ')))
-            return (Pspec,Qspec)
+            return (Pspec,Qspec,2)
     
         if Bus == 3:
             print('Bus has been selected as a generator bus')
             p1 = float(input('Enter the real power of the generator: '))
             v1 = float(input('Enter the voltage magnitude of the generator: '))
-            return (p1,v1)
+            return (p1,v1,3)
         
     def Y_bus(n):   #n is 2 or 3 for this project - accepts line details and forms Ybus
         parameter_nature = {}
@@ -87,8 +87,7 @@ class system():
             elif Y_Z == 1:
                 Y1_2 = 1/L12
                 Y1_3 = 1/L13
-                Y2_3 = 1/L23
-    
+                Y2_3 = 1/L23   
                 Y11 = Y1_2 + Y1_3
                 Y12 = Y21 = -Y1_2
                 Y13 = Y31 = -Y1_3
@@ -99,82 +98,45 @@ class system():
         return Ybus
     
     def Gauss_Seidel():
-        B1=V1=system.accept_input()
-        B2=system.accept_input()
-        S=complex(B2[0],-B2[1])
-#        v1=system.convert_pol2rec(B1)
-        Y=system.Y_bus(2)
-        v2=1+0j
-        v2_old=system.polar(v2)
-        error=0.1
-        #error1=error2=0.1
-        iteration=0
-        while error>0.05:
-            i=1
-            for j in range(1,i+1):
-                v2_new=1/Y[i+1][i+1]*((S/v2.conjugate())-(Y[i+1][j]*V1))
-                v2=v2_new
-                V2=system.polar(v2_new)
-                #error1=abs(V2[0]-v2_old[0])
-                #error2=abs(V2[1]-v2_old[0])
+        n=int(input("Enter the number of buses: "))
+        if n==2:
+            B1=V1=system.accept_input()
+            B2=system.accept_input()
+            S=complex(B2[0],-B2[1])
+            Y=system.Y_bus(n)
+            v2=1+0j
+            error=0.1
+            iteration=0
+            while error>0.005:
+                v2_old=system.polar(v2)
+                v2_new=1/Y[1][1]*((S/v2.conjugate())-(Y[1][0]*V1))
+                V2=system.polar(v2_new)    
                 error=abs(V2[0]-v2_old[0])
-                v2_updated=complex(V2[0],V2[1])
+                v2=v2_new
                 iteration+=1
-        return 'voltage:' +str(v2_updated)+' '+'iter:' +str(iteration)
-        #return 'voltage mag:' + str(V2[0])+' '+'voltage angle:' +str(V2[1])+' '+'No. of iterations:' +str(iteration)
-#        P2=-p2
-#       Q2=-q2
-#        S2=complex(P2,-Q2)
-#        v1_real=float(input("Enter the real part of voltage at bus 1: "))
-#        v1_imaginary=float(input("Enter the imaginary part of voltage at bus 1: "))
-#        v1=complex(v1_real,v1_imaginary)
-#        v2=complex(1,0)
-#        for i in range(1,n+1):
-#            V2=1/Y[1][1]*((S2/v2.conjugate())-(Y[0][1]*v1))
-#            v2=new_v2
-#        return(newv2)
-#    elif number_of_buses==3:
-#        a1=float(input("Enter the real part of bus 1-2: "))
-#        a2=float(input("Enter the imaginary part of bus 1-2: "))
-#        b1=float(input("Enter the real part of bus 1-3: "))
-#        b2=float(input("Enter the imaginary part of bus 1-3: "))
-#        c1=float(input("Enter the real part of bus 2-3: "))
-#        c2=float(input("Enter the imaginary part of bus 2-3: "))
-#        p1=float(input("Enter the real power for bus 1 in pu: "))
-#        q1=float(input("Enter the  reactive power for bus 1 in pu: "))
-#        p2=float(input("Enter the real power for bus 2 in pu: "))
-#        q2=float(input("Enter the  reactive power for bus 2 in pu: "))
-#        p3=float(input("Enter the real power for bus 3 in pu: "))
-#        q3=float(input("Enter the  reactive power for bus 3 in pu: "))
-#        z12=complex(a1,a2)
-#        z13=complex(b1,b2)
-#        z23=complex(c1,c2)
-#        Y=np.array([[1/z12+1/z13,-1/z12,-1/z13],[-1/z12,1/z12+1/z23,-1/z23],[-1/z13,-1/z23,1/z13+1/z23]])
-#        print("The Y bus matrix is:" +str(Y))
-        #y12=y21=1/z12        
-        #y13=y31=1/z13
-        #y23=y32=1/z23
-        #Y11=y12+y13
-        #Y22=y21+y23
-        #Y33=y31+y32
-        #Y12=Y21=-y12
-        #Y13=Y31=-y13
-        #Y23=Y32=-y23
-#        v1=complex(1.05,0)
-#        v2=complex(1,0)
-#        v3=complex(1,0)
-#        P2=-p2
-#        Q2=-q2
-#        S2=complex(P2,-Q2)
-#        P3=-p3
-#        Q3=-q3
-#        S3=complex(P3,-Q3)
-#        for i in range(1,n+1):
-#            V2=1/Y[1][1]*((S2/v2.conjugate())-(Y[0][1]*v1)-(Y[1][2]*v3))
-#            v2=V2
-#            V3=1/Y[2][2]*((S3/v3.conjugate())-(Y[0][2]*v1)-(Y[1][2]*V2))
-#            v3=V3
-#            print(polar(V2))
-#            print(polar(V3))
-#        return(V2)
-#        return(V3)
+            return 'voltage:' +str(V2)+' '+'iter:' +str(iteration)
+        elif n==3:
+            B1=V1=system.accept_input()
+            B2=system.accept_input()
+            B3=system.accept_input()
+            S2=complex(B2[0],-B2[1])
+            S3=complex(B3[0],-B3[1])
+            Y=system.Y_bus(n)
+            v2=1+0j
+            v3=1+0j
+            error1=error2=0.1
+            iteration=0
+            while error1>0.005 and error2>0.005:
+                v2_old=system.polar(v2)
+                v3_old=system.polar(v3)
+                v2_new=1/Y[1][1]*((S2/v2.conjugate())-(Y[0][1]*V1)-(Y[1][2]*v3))
+                V2=system.polar(v2_new)
+                v3_new=1/Y[2][2]*((S3/v3.conjugate())-(Y[0][2]*V1)-(Y[1][2]*v2_new))
+                V3=system.polar(v3_new)
+                error1=abs(V2[0]-v2_old[0])
+                error2=abs(V3[0]-v2_old[0])
+                v2=v2_new
+                v3=v3_new
+                iteration+=1
+            return 'voltage at bus 2:' +str(V2)+' '+'voltage at bus 3:' +str(V3)+' '+'iter:' +str(iteration)
+                
