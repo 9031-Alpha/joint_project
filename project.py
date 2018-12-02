@@ -316,17 +316,26 @@ def Gauss_Seidel():
                 B2 = (C[0],C[1])
             elif C[-1] == 3:
                 B3 = (C[0],C[1])
-
+            p3=C[0]
+            vol3=C[1]
+            v3=complex(vol3,0)
             S2=complex(B2[0],-B2[1])
-            S3=complex(B3[0],-B3[1])
             Y=Y_bus(n)
             v2=1+0j
-            v3=1+0j
             error1=error2=0.1
             iteration=0
             while error1>0.005 and error2>0.005:
                 v2_old=polar(v2)
                 v3_old=polar(v3)
+                reactive3=-(((Y[1][1]*v2.real)+(Y[1][0]*V1.real)+(Y[1][2]*v3.real))*v2.conjugate())
+                q3=reactive3.imag
+                if q3 < -0.4:
+                    S3=complex(p3,0.4)
+                elif q3 > 0.7:
+                    S3=complex(p3,-0.7)
+                else:
+                    S3=complex(p3,q3)
+                #v3_old=polar(v3)
                 v2_new=1/Y[1][1]*((S2/v2.conjugate())-(Y[0][1]*V1)-(Y[1][2]*v3))
                 V2=polar(v2_new)
                 v3_new=1/Y[2][2]*((S3/v3.conjugate())-(Y[0][2]*V1)-(Y[1][2]*v2_new))
@@ -337,6 +346,7 @@ def Gauss_Seidel():
                 v3=v3_new
                 iteration+=1
             return 'voltage at bus 2:' +str(V2)+' '+'voltage at bus 3:' +str(V3)+' '+'iter:' +str(iteration)
+
 
 def System_Run():
     method ={}
