@@ -195,6 +195,7 @@ def NP():       #TO BE DONE: AUTOMATICALLY ASSIGN BUS BASED ON IMPUT
             v1 = (B[0])
         elif B[-1] == 2:
             B2 = (B[0],B[1])
+            B22 = B2        # when used for two load buses
         elif B[-1] == 3:
             B3 = (B[0],B[1])
         C = accept_input()  # third bus input
@@ -202,34 +203,51 @@ def NP():       #TO BE DONE: AUTOMATICALLY ASSIGN BUS BASED ON IMPUT
             v1 = (C[0])
         elif C[-1] == 2:
             B2 = (C[0],C[1])
+            B23 = B2            # when used for two load buses
         elif C[-1] == 3:
             B3 = (C[0],C[1])
-     
+        
         Y = Y_bus(no_of_bus)    # Admittance matrix of the system
         #flat start
-        v2 = 1+0j
-        v3 = convert_pol2rec(B3[1],0)
+        PV = 0
+        if A[-1] == B[-1] == 2 or C[-1] == A[-1] == 2 or B[-1] == C[-1] == 2:
+            PV = 1          # Two load buses present
+            v2 = v3 = 1+0j
+        else:
+            v2 = 1+0j
+            v3 = convert_pol2rec(B3[1],0)
         error1 = error2 = error3 = 0.1
         iterations = 0
-        while error1 > 0.01 and error2 > 0.05 and error3 > 0.05:
+        while error1 > 0.005 and error2 > 0.05:
             volts = array([[v1],[v2],[v3]])
             (Vm,Vang) = (abs(volts),angle(volts))
             (Ym,Yang) =(abs(Y),angle(Y))
          
             i = 1
-            P2cal = Q2cal = P3cal = 0
+            P2cal = Q2cal = P3cal = Q3cal = 0
             for j in range(0,i+2):
                 P2cal +=  Vm[i]*Vm[j]*Ym[i,j]*math.cos(Yang[i,j]+Vang[j]-Vang[i])
                 Q2cal -=  Vm[i]*Vm[j]*Ym[i,j]*math.sin(Yang[i,j]+Vang[j]-Vang[i])
-                P3cal +=  Vm[i+1]*Vm[j]*Ym[i+1,j]*math.sin(Yang[i+1,j]+Vang[j]-Vang[i+1])
+                P3cal +=  Vm[i+1]*Vm[j]*Ym[i+1,j]*math.cos(Yang[i+1,j]+Vang[j]-Vang[i+1])
+                if PV == 1:
+                    Q3cal -= Vm[i+1]*Vm[j]*Ym[i+1,j]*math.sin(Yang[i+1,j]+Vang[j]-Vang[i+1]) 
             P2cal = round((P2cal.tolist()[0]),4)
             Q2cal = round((Q2cal.tolist()[0]),4)
             P3cal = round((P3cal.tolist()[0]),4)
-        
-            delta_P2 = B2[0] - P2cal
-            delta_Q2 = B2[1] - Q2cal
-            delta_P3 = B3[0] - P3cal
-            MM = matrix([[delta_P2],[delta_Q2],[delta_P3]])
+            if PV == 1:
+                Q3cal = round((Q3cal.tolist()[0]),4)
+                delta_P3 = B23[0] - P3cal
+            else:
+                delta_P3 = B3[0] - P3cal
+            
+            delta_P2 = B22[0] - P2cal
+            delta_Q2 = B22[1] - Q2cal
+            
+            if PV == 1:
+                delta_Q3 = B23[1] - Q3cal
+                MM = matrix([[delta_P2],[delta_Q2],[delta_P3],[delta_Q3]])
+            else:
+                MM = matrix([[delta_P2],[delta_Q2],[delta_P3]])
             j = 0
             k =2
             # jacobian matrix 
@@ -242,8 +260,19 @@ def NP():       #TO BE DONE: AUTOMATICALLY ASSIGN BUS BASED ON IMPUT
             J31 = dp3_delta2 = (-Vm[k]*Vm[i]*Ym[k,i]*math.sin(Yang[k,i]+Vang[i]-Vang[k]))[0]
             J32 = dp3_dV = (Vm[k]*Ym[k,i]*math.cos(Yang[k,i]+Vang[i]-Vang[k]))[0]
             J33 = dp3_delta3 = (Vm[k]*Vm[j]*Ym[k,j]*math.sin(Yang[k,j]+Vang[j]-Vang[k]) + Vm[k]*Vm[i]*Ym[k,i]*math.sin(Yang[k,i]+Vang[i]-Vang[k]))[0]
-        
-            Jbus = array([[J11,J12,J13],[J21,J22,J23],[J31, J32, J33]])
+            
+            if PV ==1 :
+                J14 = (Vm[i]*Ym[i,k]*math.cos(Yang[i,k]+Vang[k]-Vang[i]))[0]
+                J24 = (-Vm[i]*Ym[i,k]*math.sin(Yang[i,k]+Vang[k]-Vang[i]))[0]
+                J34 = (Vm[j]*Ym[k,j]*math.cos(Yang[k,j]+Vang[j]-Vang[k]) + Vm[i]*Ym[k,i]*math.cos(Yang[k,i]+Vang[i]-Vang[k]) + 2*Vm[k]*Ym[k,k]*math.cos(Yang[k,k]))[0]
+                J41 = (-Vm[k]*Vm[i]*Ym[k,i]*math.cos(Yang[k,i]+Vang[i]-Vang[k]))[0]
+                J42 = (-Vm[k]*Ym[k,i]*math.sin(Yang[k,i]+Vang[i]-Vang[k]))[0]
+                J43 = (Vm[k]*Vm[j]*Ym[k,j]*math.cos(Yang[k,j]+Vang[j]-Vang[k]) + Vm[k]*Vm[i]*Ym[k,i]*math.cos(Yang[k,i]+Vang[i]-Vang[k]))[0]
+                J44 = (-Vm[j]*Ym[k,j]*math.sin(Yang[k,j]+Vang[j]-Vang[k]) - Vm[i]*Ym[k,i]*math.sin(Yang[k,i]+Vang[i]-Vang[k]) - 2*Vm[k]*Ym[k,i]*math.sin(Yang[k,k]))[0]
+                
+                Jbus = array([[J11,J12,J13,J14],[J21,J22,J23,J24],[J31, J32, J33,J34],[J41,J42,J43,J44]])
+            else:
+                Jbus = array([[J11,J12,J13],[J21,J22,J23],[J31, J32, J33]])
         
             Jmat = np.asmatrix(Jbus)
             Inv_Jmat = Jmat.I                           # inverse of the J matrix
@@ -251,6 +280,9 @@ def NP():       #TO BE DONE: AUTOMATICALLY ASSIGN BUS BASED ON IMPUT
             delta_ang2 = deltas[0][0]
             delta_V2 = deltas[1][0]
             delta_ang3 = deltas[2][0]
+            if PV == 1:
+                delta_V3 = deltas[3][0]
+                new_V3 = Vm[2][0] + delta_V3
             new_delta2 = math.degrees(Vang[1] + delta_ang2)
             new_delta3 = math.degrees(Vang[2] + delta_ang3)
             new_V2 = Vm[1][0] + delta_V2
@@ -258,15 +290,21 @@ def NP():       #TO BE DONE: AUTOMATICALLY ASSIGN BUS BASED ON IMPUT
             error2 = abs(new_delta2 - Vang[1])
             error3 = abs(new_delta3 - Vang[2])
             v2= convert_pol2rec(new_V2,new_delta2)
-            v3 = convert_pol2rec(B3[1],new_delta3)
+            if PV == 1:
+               v3 = convert_pol2rec(new_V3,new_delta3) 
+            else:
+                v3 = convert_pol2rec(B3[1],new_delta3)
             iterations += 1
             if iterations > 50:
                 print('BLACK OUT!')
                 break
             else:
                 pass
-        return (new_delta2,new_V2,new_delta3,iterations)
-    
+        if PV == 1:
+            return (P2cal,Q2cal,P3cal,Q3cal)
+        else:
+            return (new_delta2,new_V2,new_delta3,iterations)
+        
 def Gauss_Seidel():
         n=int(input("Enter the number of buses: "))
         if n==2:
