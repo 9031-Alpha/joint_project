@@ -175,7 +175,7 @@ def NP():       #TO BE DONE: AUTOMATICALLY ASSIGN BUS BASED ON IMPUT
                 break
             else:
                 pass
-        return 'Load bus voltage mag: '+ str(round(new_V,4)) + ' voltage angle: '+str(round(new_delta,4)) + ' No of iterations: '+str(iterations)
+        return 'Voltage at Load Bus' + '\n-------------------------' +'\nVoltage mag: '+ str(round(new_V,4)) + '\nVoltage angle: '+str(round(new_delta,4)) + ' No of iterations: '+str(iterations)
    
     elif no_of_bus == 3:
         '''
@@ -218,7 +218,7 @@ def NP():       #TO BE DONE: AUTOMATICALLY ASSIGN BUS BASED ON IMPUT
             v3 = convert_pol2rec(B3[1],0)
         error1 = error2 = error3 = 0.1
         iterations = 0
-        while error1 > 0.005 and error2 > 0.05:
+        for l in range(1):
             volts = array([[v1],[v2],[v3]])
             (Vm,Vang) = (abs(volts),angle(volts))
             (Ym,Yang) =(abs(Y),angle(Y))
@@ -303,7 +303,8 @@ def NP():       #TO BE DONE: AUTOMATICALLY ASSIGN BUS BASED ON IMPUT
         if PV == 1:
             return (P2cal,Q2cal,P3cal,Q3cal)
         else:
-            return (new_delta2,new_V2,new_delta3,iterations)
+            return 'Load bus: voltage mag: '+ str(round(new_V2,4)) + ', voltage angle: '+str(round(new_delta2,4)) + ' Gen bus: voltage mag: ' +str(B3[1]) +' Voltage angle '+str(round(new_delta3,4))+' No of iterations: '+str(iterations)
+        
         
 def Gauss_Seidel():
         n=int(input("Enter the number of buses: "))
@@ -362,7 +363,7 @@ def Gauss_Seidel():
             v2=1+0j
             error1=error2=0.1
             iteration=0
-            while error1>0.005 and error2>0.005:
+            for l in range(1):
                 v2_old=polar(v2)
                 v3_old=polar(v3)
                 reactive3=-(((Y[1][1]*v2.real)+(Y[1][0]*V1.real)+(Y[1][2]*v3.real))*v2.conjugate())
@@ -396,10 +397,10 @@ def System_Run():
     method = int(input('Select load flow analysis method: '))
     if method == 1:
         print(" GAUSS SEIDEL's METHOD SELECTED")
-        Gauss_Seidel()
+        print(Gauss_Seidel())
     elif method == 2:
         print("NEWTON RAPHSON's METHOD SELECTED")
-        NP()
+        print(NP())
     else:
         pass
 System_Run()
