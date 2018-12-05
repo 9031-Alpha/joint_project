@@ -332,6 +332,11 @@ def Gauss_Seidel():
                 error=abs(V2[0]-v2_old[0])
                 v2=v2_new
                 iteration+=1
+                if iteration > 50:
+                    print('BLACK OUT!')
+                    break
+                else:
+                    pass
             return 'voltage:' +str(V2)+' '+'iter:' +str(iteration)
         elif n==3:
             A = accept_input()     # 1st bus input
@@ -384,6 +389,11 @@ def Gauss_Seidel():
                 v2=v2_new
                 v3=v3_new
                 iteration+=1
+                if iteration > 50:
+                    print('BLACK OUT!')
+                    break
+                else:
+                    pass
             return 'voltage at bus 2:' +str(V2)+' '+'voltage at bus 3:' +str(V3)+' '+'iter:' +str(iteration)
 
 
