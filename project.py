@@ -368,7 +368,7 @@ def Gauss_Seidel():
             v2=1+0j
             error1=error2=0.1
             iteration=0
-            for l in range(1):
+            while error1>0.005 and error2>0.005:
                 v2_old=polar(v2)
                 v3_old=polar(v3)
                 reactive3=-(((Y[1][1]*v2.real)+(Y[1][0]*V1.real)+(Y[1][2]*v3.real))*v2.conjugate())
