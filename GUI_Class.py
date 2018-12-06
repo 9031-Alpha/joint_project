@@ -81,8 +81,8 @@ class myFrame(Tk):
             self.frame.pack(fill=BOTH, pady=10, expand=1)
             
     def __str__(self):
-        Label(self.frame, text='Result:', font=('Helvetica',14), height=2).grid(row=0, column=0, sticky=W)
-        Label(self.frame, textvariable=self.result, font=('Helvetica',10), height=6).grid(row=1, column=0)
+        Label(self.frame, text='Result:', font=('Helvetica',14), height=2).pack(side=LEFT)
+        Label(self.frame, textvariable=self.result, font=('Helvetica',14), height=6).pack(side=TOP)
         return ''
             
     def exitCommand(self):
@@ -235,10 +235,10 @@ class myFrame(Tk):
         self.inputs['Number of buses'] = self.NumberOfBusses
         self.inputs['Bus 1'] = int(self.choices[self.firstBus][0])
         self.inputs['Bus 2'] = int(self.choices[self.secondBus][0])
-        self.inputs[self.firstParameter[:-1]] = self.bus1_firstParameter
-        self.inputs[self.secondParameter[:-1]] = self.bus1_secondParameter
-        self.inputs[self.thirdParameter[:-1]] = self.bus2_firstParameter
-        self.inputs[self.fourthParameter[:-1]] = self.bus2_secondParameter
+        self.inputs[self.firstParameter[:-1]+'1'] = self.bus1_firstParameter
+        self.inputs[self.secondParameter[:-1]+'1'] = self.bus1_secondParameter
+        self.inputs[self.thirdParameter[:-1]+'2'] = self.bus2_firstParameter
+        self.inputs[self.fourthParameter[:-1]+'2'] = self.bus2_secondParameter
         self.inputs['Line Parameter'] = self.line[self.lineValue[:]]
         self.inputs['Line 1-2'] = self.line12
         self.inputs['Analysis Method'] = self.methods[self.solverMethod]
@@ -246,8 +246,8 @@ class myFrame(Tk):
             self.fifthParameter = self.choices[self.thirdBus][1]
             self.sixthParameter = self.choices[self.thirdBus][2]
             self.inputs['Bus 3'] = int(self.choices[self.thirdBus][0])
-            self.inputs[self.fifthParameter[:-1]] = self.bus3_firstParameter
-            self.inputs[self.sixthParameter[:-1]] = self.bus3_secondParameter
+            self.inputs[self.fifthParameter[:-1]+'3'] = self.bus3_firstParameter
+            self.inputs[self.sixthParameter[:-1]+'3'] = self.bus3_secondParameter
             self.inputs['Line 1-3'] = self.line13
             self.inputs['Line 2-3'] = self.line23
         main()
@@ -307,9 +307,9 @@ def main():
     line_parameter = midFrame.inputs['Line Parameter']
     
     if midFrame.inputs['Bus 1'] == 1:
-        v1 = convert_pol2rec(midFrame.inputs['Voltage Magnitude of Slack'],midFrame.inputs['Voltage Angle of Slack']) 
+        v1 = convert_pol2rec(midFrame.inputs['Voltage Magnitude of Slack1'],midFrame.inputs['Voltage Angle of Slack1']) 
     if midFrame.inputs['Bus 2'] == 2: 
-        B2 = (-(midFrame.inputs['Real Power of Load']),-(midFrame.inputs['Reactive Power of Load']))
+        B2 = (-(midFrame.inputs['Real Power of Load2']),-(midFrame.inputs['Reactive Power of Load2']))
       #no input fr bus 3 as load bus, should be unique compared to bus2
         
     # converts the user
@@ -369,13 +369,13 @@ def main():
         elif no_of_bus == 3:
             PV = 0      # initalise condition to distinguisg laod bus and PV bus
             if midFrame.inputs['Bus 3'] == 3:
-                B3 = (midFrame.inputs['Real Power of Generator'],midFrame.inputs['Voltage Magnitude of Generator'])
+                B3 = (midFrame.inputs['Real Power of Generator3'],midFrame.inputs['Voltage Magnitude of Generator3'])
                 v2 = 1+0j
                 v3 = convert_pol2rec(B3[1],0)
             elif midFrame.inputs['Bus 3'] == 2:
                 PV = 1      # Bus is a PQ bus
                 v2 = v3 = 1+0j   #flat start
-                B3 = (midFrame.inputs['Real Power of Generator'],midFrame.inputs['Reactive Power of Load']) 
+                B3 = (midFrame.inputs['Real Power of Load3'],midFrame.inputs['Reactive Power of Load3']) 
             Line1_2 = midFrame.inputs['Line 1-2']
             Line1_3 = midFrame.inputs['Line 1-3']
             Line2_3 = midFrame.inputs['Line 2-3']
@@ -495,13 +495,13 @@ def main():
         
         if no_of_bus == 3:
             if midFrame.inputs['Bus 3'] == 3:
-                B3 = (midFrame.inputs['Real Power of Generator'],midFrame.inputs['Voltage Magnitude of Generator'])
+                B3 = (midFrame.inputs['Real Power of Generator3'],midFrame.inputs['Voltage Magnitude of Generator3'])
                 v2 = 1+0j
                 v3 = convert_pol2rec(B3[1],0)
             elif midFrame.inputs['Bus 3'] == 2:
                 PV = 1      # Bus is a PQ bus
                 v2 = v3 = 1+0j   #flat start
-                B3 = (midFrame.inputs['Real Power of Generator'],midFrame.inputs['Reactive Power of Load']) 
+                B3 = (midFrame.inputs['Real Power of Load3'],midFrame.inputs['Reactive Power of Load3']) 
             Line1_2 = midFrame.inputs['Line 1-2']
             Line1_3 = midFrame.inputs['Line 1-3']
             Line2_3 = midFrame.inputs['Line 2-3']
