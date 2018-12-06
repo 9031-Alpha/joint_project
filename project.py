@@ -371,14 +371,14 @@ def Gauss_Seidel():
             while error1>0.005 and error2>0.005:
                 v2_old=polar(v2)
                 v3_old=polar(v3)
-                reactive3=-(((Y[1][1]*v2.real)+(Y[1][0]*V1.real)+(Y[1][2]*v3.real))*v2.conjugate())
+                reactive3=-(((Y[2][2]*v3.real)+(Y[2][1]*V1.real)+(Y[2][1]*v2.real))*v3.conjugate())
                 q3=reactive3.imag
                 if q3 < -0.4:
                     S3=complex(p3,0.4)
                 elif q3 > 0.7:
                     S3=complex(p3,-0.7)
                 else:
-                    S3=complex(p3,q3)
+                    S3=complex(p3,-q3)
                 #v3_old=polar(v3)
                 v2_new=1/Y[1][1]*((S2/v2.conjugate())-(Y[0][1]*V1)-(Y[1][2]*v3))
                 V2=polar(v2_new)
