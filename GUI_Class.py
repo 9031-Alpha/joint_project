@@ -1,3 +1,10 @@
+# ECE 9013 - Programming for Engineers 
+# Group 07 project - Power systems Analysis using Python
+# Group members - Igbasanmi Olusegun, Mohamed Omer Airaj, Mohamed Fahmy
+# Date - December 6th, 2018
+
+
+
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
