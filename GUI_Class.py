@@ -81,8 +81,8 @@ class myFrame(Tk):
             self.frame.pack(fill=BOTH, pady=10, expand=1)
             
     def __str__(self):
-        Label(self.frame, text='Result:', font=('Helvetica',14), height=2).pack(side=LEFT)
-        Label(self.frame, textvariable=self.result, font=('Helvetica',14), height=6).pack(side=TOP)
+        Label(self.frame, text='Result:', font=('Helvetica',14), height=2).grid(row=0, column=0, padx=10)
+        Label(self.frame, textvariable=self.result, font=('Helvetica',14), height=6).grid(row=0, column=1, padx=400)
         return ''
             
     def exitCommand(self):
