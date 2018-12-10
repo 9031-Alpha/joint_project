@@ -88,8 +88,8 @@ class myFrame(Tk):
             self.frame.pack(fill=BOTH, pady=10, expand=1)
             
     def __str__(self):
-        Label(self.frame, text='Result:', font=('Helvetica',14), height=2).grid(row=0, column=0, padx=10)
-        Label(self.frame, textvariable=self.result, font=('Helvetica',14), height=6).grid(row=0, column=1, padx=400)
+        Label(self.frame, text='Result:', font=('Helvetica',12), height=2).grid(row=0, column=0, padx=10)
+        Label(self.frame, textvariable=self.result, font=('Helvetica',12), height=6).grid(row=0, column=1, padx=400)
         return ''
             
     def exitCommand(self):
@@ -259,7 +259,7 @@ class myFrame(Tk):
             self.inputs['Line 2-3'] = self.line23
         main()
 
-def convert_pol2rec(v,ang): # converts user input to rectangular form usable by python
+def convert_pol2rec(v,ang): # converts user input to rectangular form usable for 
     return v*exp(1j*deg2rad(ang))
 
 def convert_rec2pol(x):     # converts python out to polar form understandable by user
@@ -502,6 +502,7 @@ def main():
             Answer = 'System Voltage Profile\n-------------------------'+'\nBus 1(Slack):' +str(convert_rec2pol(v1)) +'\nBus 2(Load): |V| '+ str(round(V2[0],4)) +'<angle '+ str(round(V2[1],4))+'\nNo of iterations:' +str(iteration)
         
         if no_of_bus == 3:
+            PV = 0
             if midFrame.inputs['Bus 3'] == 3:
                 B3 = (midFrame.inputs['Real Power of Generator3'],midFrame.inputs['Voltage Magnitude of Generator3'])
                 v2 = 1+0j
@@ -522,7 +523,7 @@ def main():
             S2=complex(B2[0],-B2[1])
             error1=error2=0.1
             iteration = status =0
-            while error1>0.005 or error2>0.005:
+            while error1>0.005 and error2>0.005:
                 v2_old=polar(v2)
                 v3_old=polar(v3)
                 if PV != 1:
