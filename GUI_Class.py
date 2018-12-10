@@ -552,7 +552,7 @@ def main():
                     break
                 else:
                     pass
-            Answer = 'System Voltage Profile\n-------------------------'+'\nBus 1(Slack):' + str(convert_rec2pol(v1)) + '\nBus 2 (Load) |V|: ' +str(round(V2[0],4))+' <angle '+str(round(V2[1],4))+'\nBus3 (Gen): |V|' +str(round(B3[0],4))+' <angle '+ str(round(V3[1],4))+'\nNo of iterations:' +str(iteration)
+            Answer = 'System Voltage Profile\n-------------------------'+'\nBus 1(Slack):' + str(convert_rec2pol(v1)) + '\nBus 2 (Load) |V|: ' +str(round(V2[0],4))+' <angle '+str(round(V2[1],4))+'\nBus3 (Gen): |V|' +str(round(B3[1],4))+' <angle '+ str(round(V3[1],4))+'\nNo of iterations:' +str(iteration)
             
     botFrame.result.set(Answer)
     print(botFrame)
