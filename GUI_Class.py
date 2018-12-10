@@ -320,17 +320,28 @@ class myFrame(Tk):
         main()
 
 def convert_pol2rec(v,ang): # converts user input to rectangular form usable form using numpy library 
+    ''' V,ang (float): voltage magnitude and angle
+        function uses numpy functions and converts user input to rectangular form '''
     return v*exp(1j*deg2rad(ang))
 
 def convert_rec2pol(x):     # converts python out to polar form understandable by user using numpy
+    ''' x(complex number): uses numpy and converts input from rectangular to polar form
+        useful for outputting result in form understandable by user '''
+        
     return (abs(x),rad2deg(angle(x)))
 def polar(z):               # converts to polar form but used only in gauss seidel iteration below
+    '''z(complex) : converts input to polar form, used in gauss seidel iteration '''
     p=abs(z)
     d=(math.atan(z.imag/z.real))*180/math.pi
     return(p,d)
 
 
 def Y_bus(n,line_parameter, Line1_2 = None, Line1_3=None,Line2_3 = None):   #n is 2 or 3 for this project - accepts line details and forms Ybus
+    ''' n(interger) : no of buses of the system
+        Line1_2,Line1_3,Line2_3 (complex) : the line impedance or admittance values
+        line_paramter(integer) : if 1, admittance inputted, if 2, impedance values inputted
+        The function solves and outputs the admittance matrix of the system '''
+    
     Y_Z = line_parameter  
     if n == 2:
         L12 = Line1_2
