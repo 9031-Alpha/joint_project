@@ -16,6 +16,12 @@ from numpy import linalg
 
 
 class myFrame(Tk):
+    """
+    This is the GUI Class. The class builds the frames and packs them inside the GUI window.
+    The init method takes in the master (root) where the frames wre packed and the position 
+    at which we want the frames to be packed. The flow for this class differs depending on 
+    the region. Each method runs then calls another method until the desired frame is built.
+    """
     def __init__(self, master, region=None):
         Frame.__init__(self, master)
         self.master=master
@@ -88,14 +94,27 @@ class myFrame(Tk):
             self.frame.pack(fill=BOTH, pady=10, expand=1)
             
     def __str__(self):
+        """
+        Overriding the __str__ method to print directly to the GUI bottom frame instead of
+        printing to the python console. In order to print, the String variable result has to be set
+        to the required string first. Then by using print(botFrame), this string is shown in the GUI.
+        """
         Label(self.frame, text='Result:', font=('Helvetica',12), height=2).grid(row=0, column=0, padx=10)
         Label(self.frame, textvariable=self.result, font=('Helvetica',12), height=6).grid(row=0, column=1, padx=400)
         return ''
             
     def exitCommand(self):
+        """
+        Exit command for the exit button
+        """
         self.master.destroy()
             
     def resetBus_number(self, n=None):
+        """
+        Reseting the main (mid) frame when the bus number is changed and the submit button is clicked. n=1 is used to indicate
+        that the submit button has been clicked to get a new layout for the frame, otherwise just reset the frame and wait until
+        the submit button is clicked to build the layout.
+        """
         for child in self.frame.winfo_children():
             child.destroy()
         self.addBus_number()
@@ -103,6 +122,9 @@ class myFrame(Tk):
             self.getBus_number()
     
     def addBus_number(self):
+        """
+        initializing the rame by first asking for the bus number from the user and then build the frame accordingly.
+        """
         Label(self.frame, text='Enter Number of Buses:   ', font=('Helvetica',12), height=2).grid(row=0, column=0, sticky=E)
         Entry(self.frame, width=20, textvariable=self.entry0).grid(row=0, column=1)
         self.submitButton = Button(self.frame, text='Submit', font=('Helvetica',10), command=lambda: self.resetBus_number(1))
@@ -111,6 +133,10 @@ class myFrame(Tk):
         self.exitButton.grid(row=11, column=8, ipadx=10, pady=30, sticky=W)
     
     def getBus_number(self):
+        """
+        Method to get the bus number entered by the user. If the user entered an invalid number or character, 
+        it shows an error message box.
+        """
         try:
             self.NumberOfBusses = int(self.entry0.get())
             if self.NumberOfBusses != 2 and self.NumberOfBusses != 3:
@@ -125,6 +151,9 @@ class myFrame(Tk):
             messagebox.showerror('Error','Number of buses should be a numeric value.')
                 
     def addEntries(self):
+        """
+        Method to add entry widgets to the frame, depending on the user input for number of busses.
+        """
         Entry(self.frame, width=20, textvariable=self.entry1).grid(row=1, column=4)
         Entry(self.frame, width=20, textvariable=self.entry2).grid(row=2, column=4)
         Entry(self.frame, width=20, textvariable=self.entry3).grid(row=3, column=4)
@@ -141,6 +170,9 @@ class myFrame(Tk):
         self.addOptions()
     
     def addLabels(self):
+        """
+        This method adds labels to the frame depending on the number of busses.
+        """
         Label(self.frame, text='Parameters:', font=('Helvetica',12), height=2).grid(row=0, column=3, padx=50, sticky=E)
         Label(self.frame, text='Bus #1:   ', font=('Helvetica',12), height=2).grid(row=1, column=0, sticky=E)
         Label(self.frame, text='Bus #2:   ', font=('Helvetica',12), height=2).grid(row=3, column=0, sticky=E)
@@ -166,6 +198,11 @@ class myFrame(Tk):
         self.addEntries()
     
     def addOptions(self):
+        """
+        This method adds option menus to the frame depending on the number of busses. The option menus are binded
+        using command to the getChoices method. This allows us to update our labels and ask the user for different
+        inputs depending on the selected option from each menu.
+        """
         self.menu1 = OptionMenu(self.frame, self.bus1, *list(self.choices.keys()), command=self.getChoices)
         self.menu1.config(font=('Helvetica',10))
         self.menu1['menu'].config(font=('Helvetica',10))
@@ -193,6 +230,11 @@ class myFrame(Tk):
             self.menu3.grid(row=5, column=1, sticky=E)
     
     def getChoices(self, event=None):
+        """
+        Method to bind with the option menus command line in order to get the selected option once
+        the user selects it. The selections are then passed to the method updateLabels.
+        This method accepts events such as button or mouse clicks.
+        """
         self.firstBus = self.bus1.get()
         self.secondBus = self.bus2.get()
         self.lineValue = self.lineParam.get()
@@ -202,6 +244,10 @@ class myFrame(Tk):
         self.updateLabels()
     
     def updateLabels(self, event=None):
+        """
+        This method updates the labels inside the frame depending on the user selection
+        in the option menus. It asks for different data inputs for different selections.
+        """
         self.param1.set(self.choices[self.firstBus][1])
         self.param2.set(self.choices[self.firstBus][2])
         self.param3.set(self.choices[self.secondBus][1])
@@ -211,12 +257,21 @@ class myFrame(Tk):
             self.param6.set(self.choices[self.thirdBus][2])
     
     def addTitle(self):
+        """
+        Method to add the title of the GUI window to the top frame.
+        """
         Label(self.frame, text='Welcome to Group 07 Power System Simulator', font=('Helvetica',20), height=2).pack()
     
     def addSeperator(self):
+        """
+        Method to add seperators in between frames.
+        """
         ttk.Separator(self.master).pack(fill=X)
 
     def getInput_string(self):
+        """
+        Method to get the user inputs that were entered to the Entry boxes (widgets).
+        """
         try:
             self.bus1_firstParameter = float(self.entry1.get())
             self.bus1_secondParameter = float(self.entry2.get())
@@ -233,6 +288,11 @@ class myFrame(Tk):
         self.getInputs()
                 
     def getInputs(self):
+        """
+        This method packs all user inputs into one variable (inputs) which is accessible and easy to use in the rest of the code.
+        The inputs variable is a dictionary where the keys are unique names for the obtained parameters, and the values are
+        the user inputs. Some of the user inputs are changed to fit the main code.
+        """
         self.NumberOfBusses = int(self.entry0.get())
         self.getChoices()
         self.firstParameter = self.choices[self.firstBus][1]
