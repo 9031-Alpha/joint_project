@@ -473,7 +473,7 @@ def main():
                 else:
                     pass
             if PV == 1:
-                Answer = (P2cal,Q2cal,P3cal,Q3cal)
+                Answer = 'System Voltage Profile\n-------------------------' + '\nBus 1 (slack): ' +str(convert_rec2pol(v1))+ '\nBus 2 (Load): |V| : '+ str(round(new_V2,4)) + ', <angle: '+str(round(new_delta2,4)) + '\nBus 3 (Gen bus): |V|: ' +str(B3[1]) +' <angle '+str(round(new_delta3,4))+'\nNo of iterations: '+str(iterations)
             else:
                 Answer = 'System Voltage Profile\n-------------------------' + '\nBus 1 (slack): ' +str(convert_rec2pol(v1))+ '\nBus 2 (Load): |V| : '+ str(round(new_V2,4)) + ', <angle: '+str(round(new_delta2,4)) + '\nBus 3 (Gen bus): |V|: ' +str(B3[1]) +' <angle '+str(round(new_delta3,4))+'\nNo of iterations: '+str(iterations)
         
@@ -520,18 +520,20 @@ def main():
             v3=complex(vol3,0)
             S2=complex(B2[0],-B2[1])
             error1=error2=0.1
-            iteration=0
+            iteration = status =0
             while error1>0.005 and error2>0.005:
                 v2_old=polar(v2)
                 v3_old=polar(v3)
-                reactive3=-(((Y[1][1]*v2.real)+(Y[1][0]*v1.real)+(Y[1][2]*v3.real))*v2.conjugate())
-                q3=reactive3.imag
+                reactive3=(((Y[1][1]*v2.real)+(Y[1][0]*v1.real)+(Y[1][2]*v3.real))*v2.conjugate())
+                q3=(reactive3.imag)
                 if q3 < -0.4:
+                    status = 1      # limit violated
                     S3=complex(p3,0.4)
                 elif q3 > 0.7:
+                    status = 1      # limit violated
                     S3=complex(p3,-0.7)
                 else:
-                    S3=complex(p3,q3)
+                    S3=complex(p3,-q3)
                 #v3_old=polar(v3)
                 v2_new=1/Y[1][1]*((S2/v2.conjugate())-(Y[0][1]*v1)-(Y[1][2]*v3))
                 V2=polar(v2_new)
@@ -540,14 +542,17 @@ def main():
                 error1=abs(V2[0]-v2_old[0])
                 error2=abs(V3[0]-v3_old[0])
                 v2=v2_new
-                v3=v3_new
+                if status == 1:
+                    v3=v3_new
+                else:
+                    v3 = convert_pol2rec(B3[1],V3[1])
                 iteration+=1
                 if iteration > 50:
                     print('BLACK OUT!')
                     break
                 else:
                     pass
-            Answer = 'System Voltage Profile\n-------------------------'+'\nBus 1(Slack):' + str(convert_rec2pol(v1)) + '\nBus 2 (Load) |V|: ' +str(round(V2[0],4))+' <angle '+str(round(V2[1],4))+'\nBus3 (Gen): |V|' +str(round(V3[0],4))+' <angle '+ str(round(V3[1],4))+'\nNo of iterations:' +str(iteration)
+            Answer = 'System Voltage Profile\n-------------------------'+'\nBus 1(Slack):' + str(convert_rec2pol(v1)) + '\nBus 2 (Load) |V|: ' +str(round(V2[0],4))+' <angle '+str(round(V2[1],4))+'\nBus3 (Gen): |V|' +str(round(B3[0],4))+' <angle '+ str(round(V3[1],4))+'\nNo of iterations:' +str(iteration)
             
     botFrame.result.set(Answer)
     print(botFrame)
