@@ -306,37 +306,38 @@ def Y_bus(n,line_parameter, Line1_2 = None, Line1_3=None,Line2_3 = None):   #n i
     return Ybus
     
 def main():
-    print(midFrame.inputs)
+    ''' function implements newton raphson or gauss seidel method for solving the power flow 
+        function is called in the GUI class '''
+        
+    print(midFrame.inputs)      # shows all the inputs input in the GUI
     
     
-    no_of_bus = midFrame.inputs['Number of buses']
-    solver = midFrame.inputs['Analysis Method']
-    line_parameter = midFrame.inputs['Line Parameter']
+    no_of_bus = midFrame.inputs['Number of buses']      # assign number of bus input from gui to variable 
+    solver = midFrame.inputs['Analysis Method']         # select the solver method to be used
+    line_parameter = midFrame.inputs['Line Parameter']  # select if line impedance or admittance 
     
-    if midFrame.inputs['Bus 1'] == 1:
+    if midFrame.inputs['Bus 1'] == 1:   # convert user iput of voltage from polar to rectangular form 
         v1 = convert_pol2rec(midFrame.inputs['Voltage Magnitude of Slack1'],midFrame.inputs['Voltage Angle of Slack1']) 
     if midFrame.inputs['Bus 2'] == 2: 
         B2 = (-(midFrame.inputs['Real Power of Load2']),-(midFrame.inputs['Reactive Power of Load2']))
       #no input fr bus 3 as load bus, should be unique compared to bus2
         
-    # converts the user
     
-    
-    error1 = error2 = 0.1
-    iterations = 0
-    if solver == 2:
-        if no_of_bus == 2:
+    error1 = error2 = 0.1   # initialise convergence parameter for the non linear iteration
+    iterations = 0          # initialise iterations counter
+    if solver == 2:         # newton raphson method selected, solution follows the indented code
+        if no_of_bus == 2:  # two bus system configuration
             Line1_2 = midFrame.inputs['Line 1-2']
-            Y = Y_bus(no_of_bus,line_parameter,Line1_2)         # this has to be n
-            v2 = 1+0j               #flat start
-            while error1 > 0.005 or error2 > 0.05:
-                volts = array([[v1],[v2]])
-                (Vm,Vang) = (abs(volts),angle(volts))
+            Y = Y_bus(no_of_bus,line_parameter,Line1_2)   # outputs the admittance matrix by using the Ybus function
+            v2 = 1+0j               #flat start - initialise load bus voltage 1<0
+            while error1 > 0.005 or error2 > 0.05:  # convergence crieteria
+                volts = array([[v1],[v2]])          # voltage vector , 2 by 1 vector 
+                (Vm,Vang) = (abs(volts),angle(volts))   # seperates the voltage magnitude and angle while maintaining vector form
                 (Ym,Yang) =(abs(Y),angle(Y))
                 # for a two bus sytem
                 i = 1
                 Pcal = Qcal = 0
-                for j in range(0,i+1):
+                for j in range(0,i+1):      # iteration to calculate active and reactive power values 
                     Pcal +=  Vm[i]*Vm[j]*Ym[i,j]*math.cos(Yang[i,j]+Vang[j]-Vang[i])
                     Qcal -=  Vm[i]*Vm[j]*Ym[i,j]*math.sin(Yang[i,j]+Vang[j]-Vang[i])
                 Pcal = round((Pcal.tolist()[0]),4)
@@ -344,10 +345,10 @@ def main():
     
                 delta_P = B2[0] - Pcal
                 delta_Q = B2[1] - Qcal
-                MM = matrix([[delta_P],[delta_Q]])     #mismatchvector
+                MM = matrix([[delta_P],[delta_Q]])     # mismatchvector
     
                 # forming the Jacobian matrix
-                # demo for two buses. Bus MUST be slack and Bus 2 load
+                # demo for two buses. Bus 1 MUST be slack and Bus 2 load
                 j = 0
                 J11 = dp_delta = (Vm[i]*Vm[j]*Ym[i,j]*math.sin(Yang[i,j]+Vang[j]-Vang[i]))[0]
                 J12 = dp_dV = (Vm[j]*Ym[i,j]*math.cos(Yang[i,j]+Vang[j]-Vang[i]) + 2*Vm[i]*Ym[i,i]*math.cos(Yang[i,i]))[0]
@@ -360,13 +361,13 @@ def main():
                 deltas = np.asarray(Inv_Jmat * MM) 
                 delta_ang = deltas[0][0]
                 delta_V = deltas[1][0]
-                new_delta = math.degrees(Vang[1] + delta_ang)
-                new_V = Vm[1][0] + delta_V
+                new_delta = math.degrees(Vang[1] + delta_ang)   # current value of voltage angle based on iteration
+                new_V = Vm[1][0] + delta_V                      # current value of voltage magnitude
                 error1 = abs(new_V - Vm[1])
                 error2 = abs(new_delta - rad2deg(Vang[1]))
                 v2= convert_pol2rec(new_V,new_delta)         # angle has to be in degrees 
                 iterations += 1  
-                if iterations > 50:
+                if iterations > 50:     # end simulation if solution does not converge after 50 iterations
                     print(new_delta)
                     print('BLACKOUT!')
                     break
@@ -375,13 +376,13 @@ def main():
             Answer = 'System Voltage Profile \n-------------------------' +'\nBus 1 (Slack): ' + str(convert_rec2pol(v1)) + '\nBus 2 (Load): |V| ' + str(round(new_V,4)) + ' <angle: '+str(round(new_delta,4)) + '\nNo of iterations: '+str(iterations)
    
         elif no_of_bus == 3:
-            PV = 0      # initalise condition to distinguisg laod bus and PV bus
-            if midFrame.inputs['Bus 3'] == 3:
+            PV = 0      # initalise condition to distinguish between laod bus and Generator bus
+            if midFrame.inputs['Bus 3'] == 3:  # accepts user inputs for a three bus system configuration
                 B3 = (midFrame.inputs['Real Power of Generator3'],midFrame.inputs['Voltage Magnitude of Generator3'])
                 v2 = 1+0j
                 v3 = convert_pol2rec(B3[1],0)
             elif midFrame.inputs['Bus 3'] == 2:
-                PV = 1      # Bus is a PQ bus
+                PV = 1      # varible PV is a differentiator used through the code to distinguish bus 3 as load or GEn bus
                 v2 = v3 = 1+0j   #flat start
                 B3 = (midFrame.inputs['Real Power of Load3'],midFrame.inputs['Reactive Power of Load3']) 
             Line1_2 = midFrame.inputs['Line 1-2']
@@ -391,7 +392,7 @@ def main():
             Y = Y_bus(no_of_bus,line_parameter,Line1_2,Line1_3,Line2_3)    # Admittance matrix of the system
             error1 = error2 = error3 = 0.1
             iterations = 0
-            while error1 > 0.005 or error2 > 0.005:
+            while error1 > 0.005 or error2 > 0.005 or error3 > 0.005:     # convergence crieteria
                 volts = array([[v1],[v2],[v3]])
                 (Vm,Vang) = (abs(volts),angle(volts))
                 (Ym,Yang) =(abs(Y),angle(Y))
@@ -402,12 +403,12 @@ def main():
                     P2cal +=  Vm[i]*Vm[j]*Ym[i,j]*math.cos(Yang[i,j]+Vang[j]-Vang[i])
                     Q2cal -=  Vm[i]*Vm[j]*Ym[i,j]*math.sin(Yang[i,j]+Vang[j]-Vang[i])
                     P3cal +=  Vm[i+1]*Vm[j]*Ym[i+1,j]*math.cos(Yang[i+1,j]+Vang[j]-Vang[i+1])
-                    if PV == 1:
+                    if PV == 1:         # extra reactive power if third bus is a load bus
                         Q3cal -= Vm[i+1]*Vm[j]*Ym[i+1,j]*math.sin(Yang[i+1,j]+Vang[j]-Vang[i+1]) 
                 P2cal = round((P2cal.tolist()[0]),4)
                 Q2cal = round((Q2cal.tolist()[0]),4)
                 P3cal = round((P3cal.tolist()[0]),4)
-                if PV == 1:
+                if PV == 1: 
                     Q3cal = round((Q3cal.tolist()[0]),4)
                     delta_P3 = B3[0] - P3cal
                 else:
@@ -423,7 +424,7 @@ def main():
                     MM = matrix([[delta_P2],[delta_Q2],[delta_P3]])
                 j = 0
                 k =2
-                # jacobian matrix 
+                # jacobian matrix is a 3 by 3 matrix when the system is slack-Load_Gen. And a 4 by 4 matrix when Slack-Load-Load
                 J11 = dp2_delta2 = (Vm[i]*Vm[j]*Ym[i,j]*math.sin(Yang[i,j]+Vang[j]-Vang[i]) + Vm[i]*Vm[k]*Ym[i,k]*math.sin(Yang[i,k]+Vang[k]-Vang[i]))[0]
                 J12 = dp2_dV = (Vm[j]*Ym[i,j]*math.cos(Yang[i,j]+Vang[j]-Vang[i]) + 2*Vm[i]*Ym[i,i]*math.cos(Yang[i,i]) + Vm[k]*Ym[i,k]*math.cos(Yang[i,k]+Vang[k]-Vang[i]))[0]
                 J13 = dp2_delta3 = (-Vm[i]*Vm[k]*Ym[i,k]*math.sin(Yang[i,k]+Vang[k]-Vang[i]))[0]
@@ -434,7 +435,7 @@ def main():
                 J32 = dp3_dV = (Vm[k]*Ym[k,i]*math.cos(Yang[k,i]+Vang[i]-Vang[k]))[0]
                 J33 = dp3_delta3 = (Vm[k]*Vm[j]*Ym[k,j]*math.sin(Yang[k,j]+Vang[j]-Vang[k]) + Vm[k]*Vm[i]*Ym[k,i]*math.sin(Yang[k,i]+Vang[i]-Vang[k]))[0]
             
-                if PV ==1 :
+                if PV ==1 : # extra elements of the jacobian matrix solved for extra load bus
                     J14 = (Vm[i]*Ym[i,k]*math.cos(Yang[i,k]+Vang[k]-Vang[i]))[0]
                     J24 = (-Vm[i]*Ym[i,k]*math.sin(Yang[i,k]+Vang[k]-Vang[i]))[0]
                     J34 = (Vm[j]*Ym[k,j]*math.cos(Yang[k,j]+Vang[j]-Vang[k]) + Vm[i]*Ym[k,i]*math.cos(Yang[k,i]+Vang[i]-Vang[k]) + 2*Vm[k]*Ym[k,k]*math.cos(Yang[k,k]))[0]
@@ -468,12 +469,12 @@ def main():
                 else:
                     v3 = convert_pol2rec(B3[1],new_delta3)
                 iterations += 1
-                if iterations > 50:
+                if iterations > 50:     
                     print('BLACK OUT!')
                     break
                 else:
                     pass
-            if PV == 1:
+            if PV == 1: # result out for different configurations
                 Answer = 'System Voltage Profile\n-------------------------' + '\nBus 1 (slack): ' +str(convert_rec2pol(v1))+ '\nBus 2 (Load): |V| : '+ str(round(new_V2,4)) + ', <angle: '+str(round(new_delta2,4)) + '\nBus 3 (Load bus): |V|: ' +str(round(new_V3,4)) +' <angle '+str(round(new_delta3,4))+'\nNo of iterations: '+str(iterations)
             else:
                 Answer = 'System Voltage Profile\n-------------------------' + '\nBus 1 (slack): ' +str(convert_rec2pol(v1))+ '\nBus 2 (Load): |V| : '+ str(round(new_V2,4)) + ', <angle: '+str(round(new_delta2,4)) + '\nBus 3 (Gen bus): |V|: ' +str(B3[1]) +' <angle '+str(round(new_delta3,4))+'\nNo of iterations: '+str(iterations)
