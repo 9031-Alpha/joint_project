@@ -480,30 +480,30 @@ def main():
         
         
     elif solver == 1:     # Gauss seidel method selected
-        if no_of_bus == 2:
-            Line1_2 = midFrame.inputs['Line 1-2']
-            Y = Y_bus(no_of_bus,line_parameter,Line1_2)   
-            S=complex(B2[0],-B2[1])
-            v2=1+0j
-            error=0.1
-            iteration=0
-            while error>0.005:
-                v2_old=polar(v2)
-                v2_new=1/Y[1][1]*((S/v2.conjugate())-(Y[1][0]*v1))
-                V2=polar(v2_new)    
-                error=abs(V2[0]-v2_old[0])
-                v2=v2_new
-                iteration+=1
-                if iteration > 50:
-                    print('BLACK OUT!')
-                    break
+        if no_of_bus == 2: # User selects the option of load flow analysis for a 2 bus system
+            Line1_2 = midFrame.inputs['Line 1-2']  # Get inputs for Line 1-2 parameters
+            Y = Y_bus(no_of_bus,line_parameter,Line1_2)   # Creating the Y bus matirx and getting the elements of the matrix by calling the Y_bus function
+            S=complex(B2[0],-B2[1])  # this value is part of the equation for Gauss Siedel iteration method
+            v2=1+0j # assigning an initial value for the voltage at bus 2 (Flat Start)
+            error=0.1 # assigning an initial value to the error variable which is iterated until it reaches a convergence value of 0.005 (it works as the epsilon value from the Approximation Method we learnt in lectures)
+            iteration=0 # initialize a variable iteration
+            while error>0.005: # entering the while loop
+                v2_old=polar(v2) # calling the function polar() and assigning the value to a variable v2_old. The function polar() is a mathematical function that converts a complex number from rectangular form to polar form)
+                v2_new=1/Y[1][1]*((S/v2.conjugate())-(Y[1][0]*v1)) # new vals of voltage v2 is calculated here based on the Gauss Seidel method formula
+                V2=polar(v2_new)    # polar() function called again to convert v2_new from rectangular form to polar form and assigning it to V2
+                error=abs(V2[0]-v2_old[0]) # error is the absolute difference of voltage after the first iteration
+                v2=v2_new # updating the valus of v2 with the new value for the next iteration
+                iteration+=1 # counter incremented for the number of iterations executed
+                if iteration > 50: # There is a limit of iterations in Gauss Seidel Method after which the method fails and displas a "BLACK OUT" error. For our project we set this limit to be 50 iterations
+                    print('BLACK OUT!') # prints BLACK OUT  if the limit is crossed
+                    break  # breaks out of the loop
                 else:
-                    pass
+                    pass # else goes to the next step of printing out the values for magnitudes and angles of voltages at bus 2 and 3 and also the number of iterations neede to reach convergence
             Answer = 'System Voltage Profile\n-------------------------'+'\nBus 1(Slack):' +str(convert_rec2pol(v1)) +'\nBus 2(Load): |V| '+ str(round(V2[0],4)) +'<angle '+ str(round(V2[1],4))+'\nNo of iterations:' +str(iteration)
         
-        if no_of_bus == 3:
-            PV = 0
-            if midFrame.inputs['Bus 3'] == 3:
+        if no_of_bus == 3: # User selects the option of load flow analysis for a 3 bus system
+            PV = 0    # initalise condition to distinguisg laod bus and PV bus
+            if midFrame.inputs['Bus 3'] == 3: # data for bus 3 from the user input to GUI
                 B3 = (midFrame.inputs['Real Power of Generator3'],midFrame.inputs['Voltage Magnitude of Generator3'])
                 v2 = 1+0j
                 v3 = convert_pol2rec(B3[1],0)
@@ -519,28 +519,27 @@ def main():
             
             p3=B3[0]
             vol3=B3[1]
-            v3=complex(vol3,0)
+            v3=complex(vol3,0) # complex is an in built function in python for coverting two numbers to a complex number
             S2=complex(B2[0],-B2[1])
-            error1=error2=0.1
+            error1=error2=0.1 # assigning an initial value to the error variables which are iterated until they reaches a convergence value of 0.005 (it works as the epsilon value from the Approximation Method we learnt in lectures). We have two error variables since this is a 3 bus system
             iteration = status =0
-            while error1>0.005 and error2>0.005:
+            while error1>0.005 and error2>0.005: # entering the while loop
                 v2_old=polar(v2)
                 v3_old=polar(v3)
-                if PV != 1:
+                if PV != 1: 
                     
-                    reactive3=(((Y[1][1]*v2.real)+(Y[1][0]*v1.real)+(Y[1][2]*v3.real))*v2.conjugate())
+                    reactive3=(((Y[1][1]*v2.real)+(Y[1][0]*v1.real)+(Y[1][2]*v3.real))*v2.conjugate())  # reactive power calculation for the generator bus (PV bus which is bus 3)
                     q3=(reactive3.imag)
-                    if q3 < -0.4:
+                    if q3 < -0.4:     # if the valus of q3 is less than -0.4, the status 1 is active
                         status = 1      # limit violated
                         S3=complex(p3,0.4)
-                    elif q3 > 0.7:
+                    elif q3 > 0.7:          # if the valus of q3 is more than 0.7, the status 1 is active
                         status = 1      # limit violated
                         S3=complex(p3,-0.7)
                     else:
                         S3=complex(p3,-q3)
                 else:
                     S3 = complex(B3[0],B3[1])
-                #v3_old=polar(v3)
                 v2_new=1/Y[1][1]*((S2/v2.conjugate())-(Y[0][1]*v1)-(Y[1][2]*v3))
                 V2=polar(v2_new)
                 v3_new=1/Y[2][2]*((S3/v3.conjugate())-(Y[0][2]*v1)-(Y[1][2]*v2_new))
@@ -548,7 +547,7 @@ def main():
                 error1=abs(V2[0]-v2_old[0])
                 error2=abs(V3[0]-v3_old[0])
                 v2=v2_new
-                if status == 1:
+                if status == 1:   # the valus of voltage is updated
                     v3=v3_new
                 else:
                     v3 = convert_pol2rec(B3[1],V3[1])
@@ -557,7 +556,7 @@ def main():
                     print('BLACK OUT!')
                     break
                 else:
-                    pass
+                    pass # Answer returns the values of voltages and magnitudes for bus 2 and bus 3 after convergence
             Answer = 'System Voltage Profile\n-------------------------'+'\nBus 1(Slack):' + str(convert_rec2pol(v1)) + '\nBus 2 (Load) |V|: ' +str(round(V2[0],4))+' <angle '+str(round(V2[1],4))+'\nBus3 (Gen): |V|' +str(round(B3[1],4))+' <angle '+ str(round(V3[1],4))+'\nNo of iterations:' +str(iteration)
             
     botFrame.result.set(Answer)
