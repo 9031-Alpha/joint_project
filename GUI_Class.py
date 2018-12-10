@@ -329,7 +329,7 @@ def main():
             Line1_2 = midFrame.inputs['Line 1-2']
             Y = Y_bus(no_of_bus,line_parameter,Line1_2)         # this has to be n
             v2 = 1+0j               #flat start
-            while error1 > 0.005 and error2 > 0.05:
+            while error1 > 0.005 or error2 > 0.05:
                 volts = array([[v1],[v2]])
                 (Vm,Vang) = (abs(volts),angle(volts))
                 (Ym,Yang) =(abs(Y),angle(Y))
@@ -363,10 +363,11 @@ def main():
                 new_delta = math.degrees(Vang[1] + delta_ang)
                 new_V = Vm[1][0] + delta_V
                 error1 = abs(new_V - Vm[1])
-                error2 = abs(new_delta - Vang[1])
+                error2 = abs(new_delta - rad2deg(Vang[1]))
                 v2= convert_pol2rec(new_V,new_delta)         # angle has to be in degrees 
                 iterations += 1  
                 if iterations > 50:
+                    print(new_delta)
                     print('BLACKOUT!')
                     break
                 else:
@@ -390,7 +391,7 @@ def main():
             Y = Y_bus(no_of_bus,line_parameter,Line1_2,Line1_3,Line2_3)    # Admittance matrix of the system
             error1 = error2 = error3 = 0.1
             iterations = 0
-            while error1 > 0.005 and error2 > 0.05:
+            while error1 > 0.005 or error2 > 0.005:
                 volts = array([[v1],[v2],[v3]])
                 (Vm,Vang) = (abs(volts),angle(volts))
                 (Ym,Yang) =(abs(Y),angle(Y))
@@ -459,8 +460,8 @@ def main():
                 new_delta3 = math.degrees(Vang[2] + delta_ang3)
                 new_V2 = Vm[1][0] + delta_V2
                 error1 = abs(new_V2 - Vm[1])
-                error2 = abs(new_delta2 - Vang[1])
-                error3 = abs(new_delta3 - Vang[2])
+                error2 = abs(new_delta2 - rad2deg(Vang[1]))
+                error3 = abs(new_delta3 - rad2deg(Vang[2]))
                 v2= convert_pol2rec(new_V2,new_delta2)
                 if PV == 1:
                     v3 = convert_pol2rec(new_V3,new_delta3) 
@@ -473,7 +474,7 @@ def main():
                 else:
                     pass
             if PV == 1:
-                Answer = 'System Voltage Profile\n-------------------------' + '\nBus 1 (slack): ' +str(convert_rec2pol(v1))+ '\nBus 2 (Load): |V| : '+ str(round(new_V2,4)) + ', <angle: '+str(round(new_delta2,4)) + '\nBus 3 (Gen bus): |V|: ' +str(B3[1]) +' <angle '+str(round(new_delta3,4))+'\nNo of iterations: '+str(iterations)
+                Answer = 'System Voltage Profile\n-------------------------' + '\nBus 1 (slack): ' +str(convert_rec2pol(v1))+ '\nBus 2 (Load): |V| : '+ str(round(new_V2,4)) + ', <angle: '+str(round(new_delta2,4)) + '\nBus 3 (Load bus): |V|: ' +str(round(new_V3,4)) +' <angle '+str(round(new_delta3,4))+'\nNo of iterations: '+str(iterations)
             else:
                 Answer = 'System Voltage Profile\n-------------------------' + '\nBus 1 (slack): ' +str(convert_rec2pol(v1))+ '\nBus 2 (Load): |V| : '+ str(round(new_V2,4)) + ', <angle: '+str(round(new_delta2,4)) + '\nBus 3 (Gen bus): |V|: ' +str(B3[1]) +' <angle '+str(round(new_delta3,4))+'\nNo of iterations: '+str(iterations)
         
@@ -521,19 +522,23 @@ def main():
             S2=complex(B2[0],-B2[1])
             error1=error2=0.1
             iteration = status =0
-            while error1>0.005 and error2>0.005:
+            while error1>0.005 or error2>0.005:
                 v2_old=polar(v2)
                 v3_old=polar(v3)
-                reactive3=(((Y[1][1]*v2.real)+(Y[1][0]*v1.real)+(Y[1][2]*v3.real))*v2.conjugate())
-                q3=(reactive3.imag)
-                if q3 < -0.4:
-                    status = 1      # limit violated
-                    S3=complex(p3,0.4)
-                elif q3 > 0.7:
-                    status = 1      # limit violated
-                    S3=complex(p3,-0.7)
+                if PV != 1:
+                    
+                    reactive3=(((Y[1][1]*v2.real)+(Y[1][0]*v1.real)+(Y[1][2]*v3.real))*v2.conjugate())
+                    q3=(reactive3.imag)
+                    if q3 < -0.4:
+                        status = 1      # limit violated
+                        S3=complex(p3,0.4)
+                    elif q3 > 0.7:
+                        status = 1      # limit violated
+                        S3=complex(p3,-0.7)
+                    else:
+                        S3=complex(p3,-q3)
                 else:
-                    S3=complex(p3,-q3)
+                    S3 = complex(B3[0],B3[1])
                 #v3_old=polar(v3)
                 v2_new=1/Y[1][1]*((S2/v2.conjugate())-(Y[0][1]*v1)-(Y[1][2]*v3))
                 V2=polar(v2_new)
