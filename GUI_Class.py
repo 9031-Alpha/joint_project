@@ -259,12 +259,12 @@ class myFrame(Tk):
             self.inputs['Line 2-3'] = self.line23
         main()
 
-def convert_pol2rec(v,ang): # converts user input to rectangular form usable for 
+def convert_pol2rec(v,ang): # converts user input to rectangular form usable form using numpy library 
     return v*exp(1j*deg2rad(ang))
 
-def convert_rec2pol(x):     # converts python out to polar form understandable by user
+def convert_rec2pol(x):     # converts python out to polar form understandable by user using numpy
     return (abs(x),rad2deg(angle(x)))
-def polar(z):
+def polar(z):               # converts to polar form but used only in gauss seidel iteration below
     p=abs(z)
     d=(math.atan(z.imag/z.real))*180/math.pi
     return(p,d)
